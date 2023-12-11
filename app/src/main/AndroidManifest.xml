@@ -2,7 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
+    <uses-permission android:name="android.permission.WRITE_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.WRITE_MEDIA_VIDEO"/>
+
     <application
+        android:name="ai.hara.bnvt.SimpleMediaPlayerApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -13,7 +22,7 @@
         android:theme="@style/Theme.BNVT"
         tools:targetApi="31">
         <activity
-            android:name="ai.hara.bnvt.MainActivity"
+            android:name="ai.hara.bnvt.ui.main.MainActivity"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
@@ -21,7 +30,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
         </activity>
+
+        <service
+            android:name="ai.hara.bnvt.service.SimpleMediaService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
     </application>
 
 </manifest>
