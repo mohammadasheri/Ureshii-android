@@ -15,4 +15,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "BNVT"
 include(":app")
-include(":player")
