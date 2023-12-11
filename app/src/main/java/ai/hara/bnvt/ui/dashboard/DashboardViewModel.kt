@@ -1,4 +1,4 @@
-package com.example.bnvt.ui.dashboard
+package ai.hara.bnvt.ui.dashboard
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

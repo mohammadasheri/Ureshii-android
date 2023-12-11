@@ -1,4 +1,4 @@
-package com.example.bnvt
+package ai.hara.bnvt
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

@@ -1,4 +1,4 @@
-package com.example.bnvt
+package ai.hara.bnvt
 
 import org.junit.Test
 
