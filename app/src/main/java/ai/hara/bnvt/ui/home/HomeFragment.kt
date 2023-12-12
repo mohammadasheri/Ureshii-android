@@ -1,5 +1,7 @@
 package ai.hara.bnvt.ui.home
 
+import ai.hara.bnvt.data.model.Song
+import ai.hara.bnvt.ui.main.MainViewModel
 import ai.hara.bnvt.util.enums.Status
 import android.os.Bundle
 import android.util.Log
@@ -16,19 +18,18 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+
+    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var mainViewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-
+        homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -39,12 +40,20 @@ class HomeFragment : Fragment() {
 
         homeViewModel.getSongs().observe(viewLifecycleOwner) { response ->
             when (response.status) {
-                Status.ERROR -> Log.i("mohamamd", response.error?.message?:"")
-                Status.SUCCESS -> Log.i("mohamamd", "success")
+                Status.ERROR -> Log.i("mohamamd", response.error?.message ?: "")
+                Status.SUCCESS -> playSongs(response.data)
                 else -> {}
             }
         }
         return root
+    }
+
+    private fun playSongs(songs: List<Song>?) {
+
+        Log.i("Mohammad", "Song list received:" + (songs?.size ?: 0))
+        songs?.let {
+            binding.textHome.text = it.size.toString()
+        }
     }
 
     override fun onDestroyView() {

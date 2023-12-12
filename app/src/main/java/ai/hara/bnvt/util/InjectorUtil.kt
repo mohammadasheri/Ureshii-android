@@ -46,14 +46,14 @@ object InjectorUtils {
         if (token == null)
             token = getToken()
 
-        return GlideUrl("${getRandomHost()}$image") { mapOf(Pair("TK", token)) }
+        return GlideUrl("${getHostURL()}$image") { mapOf(Pair("TK", token)) }
     }
 
     fun getGlideUrl(id: Int?): Any? {
         if (id == null) {
             return null
         }
-        return GlideUrl("${getRandomHost()}song/picture/download/$id") {
+        return GlideUrl("${getHostURL()}song/picture/download/$id") {
             mapOf(
                 Pair(
                     "TK",
@@ -63,7 +63,7 @@ object InjectorUtils {
         }
     }
 
-    private fun getAbsoluteUrl(song: Song): String = "${getRandomHost()}song/download/${song.id}"
+    private fun getAbsoluteUrl(song: Song): String = "${getHostURL()}song/download/${song.id}"
 
     private const val MiB = 1024 * 1024.toLong()
 
@@ -94,63 +94,10 @@ object InjectorUtils {
 
     }
 
-    fun convertNumberToPersianTime(millis: Long): String {
-        val formatter: DateFormat = SimpleDateFormat("mm:ss", Locale("fa", "IR"))
-        formatter.timeZone = TimeZone.getTimeZone("UTC")
-        return formatter.format(Date(millis))
-    }
 
-    fun convertNumberToPersianNumber(milis: Long?): String {
-        val nf = NumberFormat.getInstance(Locale("fa", "IR"))
-        return nf.format(milis ?: 0)
-    }
-
-    fun readFile(file: File): ByteArray? {
-        try {
-            val inputs: InputStream = FileInputStream(file)
-            val buf = ByteArray(inputs.available())
-            while (inputs.read(buf) !== -1);
-            return buf
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return null
-    }
-
-    fun setHomeFm(fm: FragmentManager) {
-        homeFM = fm
-    }
-
-    fun setSearchFm(fm: FragmentManager) {
-        searchFM = fm
-    }
-
-    fun setLibraryFm(fm: FragmentManager) {
-        libraryFM = fm
-    }
-
-    private lateinit var libraryFM: FragmentManager
-    private lateinit var searchFM: FragmentManager
-    private lateinit var homeFM: FragmentManager
 
     fun getToken(): String = ""
     fun getId(): Int = 0
 }
 
-const val PHONEREG = "^(\\+98|0|98|0098)?9\\d{9}\$"
-var PHONEPATTERN: Pattern = Pattern.compile(PHONEREG)
-fun CharSequence.isPhoneNumber(): Boolean = PHONEPATTERN.matcher(this).find()
-
-@Throws(Exception::class)
-fun CharSequence.getPhoneNumber(): CharSequence {
-    if (!isPhoneNumber())
-        throw Exception("not valid phone number")
-    return "+98${subSequence(length - 10, length)}"
-
-}
-
-const val EMAILREG = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
-var PATTERN: Pattern = Pattern.compile(EMAILREG)
-fun CharSequence.isEmailADDRESS(): Boolean = PATTERN.matcher(this).find()
-var steper = 1
-fun getRandomHost(): String = "http://192.168.1.175:8080/"
+fun getHostURL(): String = "http://192.168.1.175:8080/"

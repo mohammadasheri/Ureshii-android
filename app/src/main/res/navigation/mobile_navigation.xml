@@ -14,12 +14,12 @@
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="ai.hara.bnvt.ui.library.LibraryFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_search"
         tools:layout="@layout/fragment_library" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="ai.hara.bnvt.ui.search.SearchFragment"
-        android:label="@string/title_notifications"
+        android:label="@string/title_library"
         tools:layout="@layout/fragment_search" />
 </navigation>

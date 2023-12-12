@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package ai.hara.bnvt.util
+package ai.hara.bnvt.util.network
 
 
 import androidx.lifecycle.LiveData
-import ai.hara.bnvt.util.network.ApiResponse
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.Callback

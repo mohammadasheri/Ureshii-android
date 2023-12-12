@@ -1,6 +1,6 @@
 package ai.hara.bnvt.util.network
 
-import ai.hara.bnvt.util.getRandomHost
+import ai.hara.bnvt.util.getHostURL
 import okhttp3.*
 import okhttp3.ResponseBody.Companion.toResponseBody
 import java.io.IOException
@@ -12,25 +12,20 @@ class HostSelectionInterceptor : Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
-
-
         request = changeReq(request)
-
-
         var response: Response = Response.Builder().request(request).protocol(Protocol.HTTP_1_1).message("عدم دسترسی به اینترنت").code(HttpURLConnection.HTTP_BAD_GATEWAY)
                 .body("عدم دسترسی به اینترنت".toResponseBody()).build()
-
         try {
             response = chain.proceed(request)
             if (response.code >= 500) {
-                if (response.request.url.host != URL(getRandomHost()).host) {
+                if (response.request.url.host != URL(getHostURL()).host) {
                     return intercept(chain)
                 }
                 return response
             }
 
         } catch (e: Throwable) {
-            if (response.request.url.host != URL(getRandomHost()).host) {
+            if (response.request.url.host != URL(getHostURL()).host) {
 
                 return intercept(chain)
             }
@@ -41,7 +36,7 @@ class HostSelectionInterceptor : Interceptor {
 
     private fun changeReq(request: Request): Request {
 
-        val aa = URL(getRandomHost())
+        val aa = URL(getHostURL())
         val newUrl = request.url.newBuilder()
                 .host(aa.host)
 

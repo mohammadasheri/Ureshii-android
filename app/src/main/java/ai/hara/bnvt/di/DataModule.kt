@@ -3,8 +3,9 @@ package ai.hara.bnvt.di
 import ai.hara.bnvt.data.repository.SongRepository
 import ai.hara.bnvt.data.service.SongServices
 import ai.hara.bnvt.util.AppExecutors
-import ai.hara.bnvt.util.LiveDataCallAdapterFactory
+import ai.hara.bnvt.util.network.LiveDataCallAdapterFactory
 import ai.hara.bnvt.util.TokenAuthenticator
+import ai.hara.bnvt.util.getHostURL
 import ai.hara.bnvt.util.network.HostSelectionInterceptor
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -36,18 +37,14 @@ class DataModule {
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-
         val gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
-        val host = "http://192.168.1.175:8080/"
-
         return Retrofit.Builder()
-            .baseUrl(host)
+            .baseUrl(getHostURL())
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .build()
     }
-
 
     @Provides
     @Singleton
