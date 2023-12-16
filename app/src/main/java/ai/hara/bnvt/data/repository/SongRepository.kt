@@ -2,16 +2,16 @@ package ai.hara.bnvt.data.repository
 
 
 import ai.hara.bnvt.data.model.Song
-import ai.hara.bnvt.data.service.SongServices
+import ai.hara.bnvt.data.service.SongService
 import ai.hara.bnvt.util.AppExecutors
 import ai.hara.bnvt.util.InjectorUtils.getId
-import ai.hara.bnvt.util.InjectorUtils.getToken
+import ai.hara.bnvt.util.getToken
 import ai.hara.bnvt.util.network.ApiResponse
 import ai.hara.bnvt.util.network.NetworkBoundResource
 import ai.hara.bnvt.util.network.Resource
 import androidx.lifecycle.LiveData
 
-class SongRepository(private val service: SongServices, private val executor: AppExecutors) {
+class SongRepository(private val service: SongService, private val executor: AppExecutors) {
 //
 //    fun likeSong(songId: Int): LiveData<Resource<SearchResult>> {
 //        return object : NetworkBoundResource<SearchResult, SearchResult>(executor) {
@@ -49,7 +49,7 @@ class SongRepository(private val service: SongServices, private val executor: Ap
     fun getSongs(): LiveData<Resource<List<Song>>> {
         return object : NetworkBoundResource<List<Song>, List<Song>>(executor) {
             override fun createCall(): LiveData<ApiResponse<List<Song>>> {
-                return service.getSongs(getId(), getToken())
+                return service.getSongs()
             }
         }.asLiveData()
     }

@@ -7,7 +7,7 @@ import ai.hara.bnvt.util.network.ApiResponse
 import androidx.lifecycle.LiveData
 import retrofit2.http.*
 
-interface SongServices {
+interface SongService {
 
     @HTTP(method = HTTPVerb.GET, path = "playlist/track", hasBody = false)
     fun getPlaylistSongs(
@@ -34,8 +34,5 @@ interface SongServices {
             : LiveData<ApiResponse<SearchResult>>
 
     @HTTP(method = HTTPVerb.GET, path = "song/list", hasBody = false)
-    fun getSongs(
-        @Query("user_id") userId: Int,
-        @Header("TK") token: String,
-    ): LiveData<ApiResponse<List<Song>>>
+    fun getSongs(): LiveData<ApiResponse<List<Song>>>
 }

@@ -3,8 +3,11 @@ package ai.hara.bnvt.ui.main
 import ai.hara.bnvt.service.PlayerEvent
 import ai.hara.bnvt.service.SimpleMediaServiceHandler
 import ai.hara.bnvt.service.SimpleMediaState
+import ai.hara.bnvt.util.network.ErrorObject
 import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,6 +34,7 @@ class MainViewModel @Inject constructor(
     var progress by savedStateHandle.saveable { mutableStateOf(0f) }
     var progressString by savedStateHandle.saveable { mutableStateOf("00:00") }
     var isPlaying by savedStateHandle.saveable { mutableStateOf(false) }
+    var isLoggedOut = MutableLiveData(false)
     private val _loading = MutableStateFlow(true)
     val loading = _loading.asStateFlow()
     private val _uiState = MutableStateFlow<UIState>(UIState.Initial)
@@ -99,12 +103,13 @@ class MainViewModel @Inject constructor(
             mediaItemList.add(
                 MediaItem.Builder()
                     .setUri("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-$it.mp3")
-                    .setMediaMetadata(MediaMetadata.Builder()
-                        .setFolderType(MediaMetadata.FOLDER_TYPE_ALBUMS)
-                        .setArtworkUri(Uri.parse("https://cdns-images.dzcdn.net/images/cover/1fddc1ab0535ee34189dc4c9f5f87bf9/264x264.jpg"))
-                        .setAlbumTitle("SoundHelix")
-                        .setDisplayTitle("Song $it")
-                        .build()
+                    .setMediaMetadata(
+                        MediaMetadata.Builder()
+                            .setFolderType(MediaMetadata.FOLDER_TYPE_ALBUMS)
+                            .setArtworkUri(Uri.parse("https://cdns-images.dzcdn.net/images/cover/1fddc1ab0535ee34189dc4c9f5f87bf9/264x264.jpg"))
+                            .setAlbumTitle("SoundHelix")
+                            .setDisplayTitle("Song $it")
+                            .build()
                     ).build()
             )
         }

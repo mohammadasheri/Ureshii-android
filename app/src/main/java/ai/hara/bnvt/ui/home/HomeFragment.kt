@@ -40,7 +40,7 @@ class HomeFragment : Fragment() {
 
         homeViewModel.getSongs().observe(viewLifecycleOwner) { response ->
             when (response.status) {
-                Status.ERROR -> Log.i("mohamamd", response.error?.message ?: "")
+                Status.ERROR -> mainViewModel.isLoggedOut.value = true
                 Status.SUCCESS -> playSongs(response.data)
                 else -> {}
             }

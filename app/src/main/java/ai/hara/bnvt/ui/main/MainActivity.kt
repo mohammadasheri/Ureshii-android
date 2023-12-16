@@ -1,6 +1,7 @@
 package ai.hara.bnvt.ui.main
 
 import ai.hara.bnvt.service.SimpleMediaService
+import ai.hara.bnvt.ui.login.LoginActivity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -35,6 +36,14 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navView.setupWithNavController(navController)
         startService()
+
+        viewModel.isLoggedOut.observe(this){isLoggedOut->
+            if (isLoggedOut){
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }
     }
 
     override fun onDestroy() {
