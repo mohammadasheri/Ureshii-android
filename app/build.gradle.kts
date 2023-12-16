@@ -54,7 +54,8 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation("com.jakewharton.timber:timber:4.7.0")
-    implementation("androidx.legacy:legacy-support-v4:1.0.0") // Needed MediaSessionCompat.Token
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation("androidx.core:core-splashscreen:1.0.1") // Needed MediaSessionCompat.Token
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
