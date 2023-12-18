@@ -1,5 +1,6 @@
 package ai.hara.bnvt.service.notification
 
+import ai.hara.bnvt.R
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -11,7 +12,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import androidx.media3.ui.PlayerNotificationManager
-import com.example.bnvt.R
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

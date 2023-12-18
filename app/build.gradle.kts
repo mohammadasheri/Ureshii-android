@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.bnvt"
+    namespace = "ai.hara.bnvt"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.bnvt"
+        applicationId = "ai.hara.bnvt"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

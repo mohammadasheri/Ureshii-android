@@ -1,5 +1,7 @@
 package ai.hara.bnvt.ui.main
 
+import ai.hara.bnvt.R
+import ai.hara.bnvt.databinding.ActivityMainBinding
 import ai.hara.bnvt.service.SimpleMediaService
 import ai.hara.bnvt.ui.login.LoginActivity
 import android.content.Intent
@@ -9,8 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.bnvt.R
-import com.example.bnvt.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
