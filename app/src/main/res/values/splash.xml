@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Theme.App.First" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">#FFD580</item>
+        <item name="windowSplashScreenBackground">#FF3700B3</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_musivio</item>
         <item name="postSplashScreenTheme">@style/Theme.BNVT</item>
     </style>

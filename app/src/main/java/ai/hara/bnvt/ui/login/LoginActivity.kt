@@ -2,7 +2,6 @@ package ai.hara.bnvt.ui.login
 
 import ai.hara.bnvt.ui.main.MainActivity
 import ai.hara.bnvt.util.enums.Status
-import ai.hara.bnvt.util.saveCredentials
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -108,9 +107,8 @@ class LoginActivity : AppCompatActivity() {
                     "ثبت نام انجام شد. لطفا وارد شوید",
                     Toast.LENGTH_LONG
                 ).show()
-
                 else -> {
-                    Log.e("Mohammad", "asdfsadf")
+                    Log.e("Mohammad", response.error.toString())
                 }
             }
         }
@@ -125,9 +123,8 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 }
-
                 else -> {
-                    Log.e("Mohammad", "asdfsadf")
+                    Log.e("Mohammad", response.error.toString())
                 }
             }
         }

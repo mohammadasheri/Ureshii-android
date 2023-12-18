@@ -4,8 +4,6 @@ package ai.hara.bnvt.data.repository
 import ai.hara.bnvt.data.model.Song
 import ai.hara.bnvt.data.service.SongService
 import ai.hara.bnvt.util.AppExecutors
-import ai.hara.bnvt.util.InjectorUtils.getId
-import ai.hara.bnvt.util.getToken
 import ai.hara.bnvt.util.network.ApiResponse
 import ai.hara.bnvt.util.network.NetworkBoundResource
 import ai.hara.bnvt.util.network.Resource
