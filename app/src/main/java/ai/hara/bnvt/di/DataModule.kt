@@ -1,7 +1,9 @@
 package ai.hara.bnvt.di
 
+import ai.hara.bnvt.data.repository.PlaylistRepository
 import ai.hara.bnvt.data.repository.SongRepository
 import ai.hara.bnvt.data.repository.UserRepository
+import ai.hara.bnvt.data.service.PlaylistService
 import ai.hara.bnvt.data.service.SongService
 import ai.hara.bnvt.data.service.UserService
 import ai.hara.bnvt.util.AppExecutors
@@ -29,6 +31,14 @@ class DataModule {
 
     @Provides
     @Singleton
+    fun providePlaylistRepository(
+        playlistApiServices: PlaylistService,
+        executors: AppExecutors
+    ): PlaylistRepository = PlaylistRepository(playlistApiServices, executors)
+
+
+    @Provides
+    @Singleton
     fun provideSongRepository(
         songApiServices: SongService,
         executors: AppExecutors
@@ -46,6 +56,12 @@ class DataModule {
     @Singleton
     fun providesSongService(retrofit: Retrofit): SongService =
         retrofit.create(SongService::class.java)
+
+    @Provides
+    @Singleton
+    fun providesPlaylistService(retrofit: Retrofit): PlaylistService =
+        retrofit.create(PlaylistService::class.java)
+
 
     @Provides
     @Singleton

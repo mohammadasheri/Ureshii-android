@@ -4,7 +4,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_main_activity"
+    android:background="@color/background"
     android:layoutDirection="rtl"
     android:paddingTop="?attr/actionBarSize">
 
@@ -16,7 +16,7 @@
         android:layout_marginEnd="0dp"
         app:itemIconTint="@drawable/tab_color_selector"
         app:itemTextColor="@drawable/tab_color_selector"
-        android:background="#26156F"
+        android:background="@color/navigation"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

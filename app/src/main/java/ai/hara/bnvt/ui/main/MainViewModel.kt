@@ -1,12 +1,12 @@
 package ai.hara.bnvt.ui.main
 
+import ai.hara.bnvt.data.model.Song
 import ai.hara.bnvt.service.PlayerEvent
 import ai.hara.bnvt.service.SimpleMediaServiceHandler
 import ai.hara.bnvt.service.SimpleMediaState
-import ai.hara.bnvt.util.network.ErrorObject
+import ai.hara.bnvt.util.getHostURL
 import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -41,12 +41,12 @@ class MainViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     init {
-
+        simpleMediaServiceHandler
         viewModelScope.launch {
             delay(200)
             _loading.value = false
 
-            loadData()
+//            loadData()
 
             simpleMediaServiceHandler.simpleMediaState.collect { mediaState ->
                 when (mediaState) {
@@ -97,24 +97,43 @@ class MainViewModel @Inject constructor(
         progressString = formatDuration(currentProgress)
     }
 
-    private fun loadData() {
+    fun loadData(songs: List<Song>, startIndex: Int) {
         val mediaItemList = mutableListOf<MediaItem>()
-        (1..17).forEach {
+        songs.forEach { song ->
             mediaItemList.add(
                 MediaItem.Builder()
-                    .setUri("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-$it.mp3")
+                    .setUri("${getHostURL()}song/download/${song.id}")
                     .setMediaMetadata(
                         MediaMetadata.Builder()
                             .setFolderType(MediaMetadata.FOLDER_TYPE_ALBUMS)
                             .setArtworkUri(Uri.parse("https://cdns-images.dzcdn.net/images/cover/1fddc1ab0535ee34189dc4c9f5f87bf9/264x264.jpg"))
-                            .setAlbumTitle("SoundHelix")
-                            .setDisplayTitle("Song $it")
+                            .setAlbumTitle(song.album)
+                            .setDisplayTitle(song.name)
                             .build()
                     ).build()
             )
         }
-        simpleMediaServiceHandler.addMediaItemList(mediaItemList)
+        simpleMediaServiceHandler.addMediaItemList(mediaItemList, startIndex, 0)
     }
+
+//    private fun loadData() {
+//        val mediaItemList = mutableListOf<MediaItem>()
+//        (1..17).forEach {
+//            mediaItemList.add(
+//                MediaItem.Builder()
+//                    .setUri("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-$it.mp3")
+//                    .setMediaMetadata(
+//                        MediaMetadata.Builder()
+//                            .setFolderType(MediaMetadata.FOLDER_TYPE_ALBUMS)
+//                            .setArtworkUri(Uri.parse("https://cdns-images.dzcdn.net/images/cover/1fddc1ab0535ee34189dc4c9f5f87bf9/264x264.jpg"))
+//                            .setAlbumTitle("SoundHelix")
+//                            .setDisplayTitle("Song $it")
+//                            .build()
+//                    ).build()
+//            )
+//        }
+//        simpleMediaServiceHandler.addMediaItemList(mediaItemList)
+//    }
 }
 
 sealed class UIEvent {

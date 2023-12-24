@@ -28,8 +28,8 @@ class SimpleMediaServiceHandler @Inject constructor(
         player.prepare()
     }
 
-    fun addMediaItemList(mediaItemList: List<MediaItem>) {
-        player.setMediaItems(mediaItemList)
+    fun addMediaItemList(mediaItemList: List<MediaItem>, startIndex:Int, startPositionMs:Long) {
+        player.setMediaItems(mediaItemList,startIndex, startPositionMs)
         player.prepare()
     }
 
