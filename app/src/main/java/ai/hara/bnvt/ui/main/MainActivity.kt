@@ -4,11 +4,13 @@ import ai.hara.bnvt.R
 import ai.hara.bnvt.databinding.ActivityMainBinding
 import ai.hara.bnvt.service.SimpleMediaService
 import ai.hara.bnvt.ui.login.LoginActivity
+import ai.hara.bnvt.ui.player.PlayerFragment
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -43,6 +45,12 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
+        }
+
+        viewModel.selectedSong.observe(this){
+            val fa: FragmentTransaction = supportFragmentManager.beginTransaction()
+            fa.add(R.id.activity_main_container, PlayerFragment.newInstance(), "asdf").addToBackStack("asdf")
+                .commit()
         }
     }
 

@@ -31,6 +31,8 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     var duration by savedStateHandle.saveable { mutableStateOf(0L) }
+    var index by savedStateHandle.saveable { mutableStateOf(0) }
+    val selectedSong = MutableLiveData<Song>()
     var progress by savedStateHandle.saveable { mutableStateOf(0f) }
     var progressString by savedStateHandle.saveable { mutableStateOf("00:00") }
     var isPlaying by savedStateHandle.saveable { mutableStateOf(false) }
@@ -45,9 +47,6 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             delay(200)
             _loading.value = false
-
-//            loadData()
-
             simpleMediaServiceHandler.simpleMediaState.collect { mediaState ->
                 when (mediaState) {
                     is SimpleMediaState.Buffering -> calculateProgressValues(mediaState.progress)
@@ -98,6 +97,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun loadData(songs: List<Song>, startIndex: Int) {
+        selectedSong.value = songs[index]
         val mediaItemList = mutableListOf<MediaItem>()
         songs.forEach { song ->
             mediaItemList.add(

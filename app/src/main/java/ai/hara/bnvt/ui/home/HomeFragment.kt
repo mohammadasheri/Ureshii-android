@@ -78,7 +78,7 @@ class HomeFragment : Fragment() {
             // is destroyed
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                UreshiiTheme {
+                MaterialTheme {
                     LazyColumn {
                         item {
                             HomePlayLists()
