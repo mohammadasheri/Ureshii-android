@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "BNVT"
+rootProject.name = "Ureshii"
 include(":app")

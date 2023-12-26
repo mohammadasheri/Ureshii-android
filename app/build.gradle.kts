@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "ai.hara.bnvt"
+    namespace = "ai.hara.ureshii"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "ai.hara.bnvt"
+        applicationId = "ai.hara.ureshii"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

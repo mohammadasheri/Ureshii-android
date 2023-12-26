@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="ai.hara.bnvt.ui.home.HomeFragment"
+        android:name="ai.hara.ureshii.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="ai.hara.bnvt.ui.library.LibraryFragment"
+        android:name="ai.hara.ureshii.ui.library.LibraryFragment"
         android:label="@string/title_search"
         tools:layout="@layout/fragment_library" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="ai.hara.bnvt.ui.search.SearchFragment"
+        android:name="ai.hara.ureshii.ui.search.SearchFragment"
         android:label="@string/title_library"
         tools:layout="@layout/fragment_search" />
 </navigation>
