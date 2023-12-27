@@ -8,11 +8,13 @@ import ai.hara.ureshii.ui.login.LoginActivity
 import ai.hara.ureshii.ui.player.PlayerFragment
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.media3.common.MediaItem
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -56,6 +58,25 @@ class MainActivity : AppCompatActivity() {
                 fa.replace(R.id.activity_main_container, PlayerFragment.newInstance(), "playerFragment").addToBackStack(null)
                     .commit()
             }
+            updateUI(it)
+        }
+    }
+
+    private fun updateUI(mediaItem: MediaItem) {
+        binding.activityMainPlayback.visibility = View.VISIBLE
+
+//        GlideApp.with(this)
+//            .load(metadata.albumArtUri)
+//            .placeholder(R.drawable.baseline_music_note_24)
+//            .centerCrop()
+//            .error(R.drawable.baseline_music_note_24)
+//            .into(binding.activityMainPlaybackImage)
+        binding.activityMainPlaybackTitle.text = mediaItem.mediaMetadata.displayTitle
+        binding.activityMainPlaybackArtist.text = mediaItem.mediaMetadata.artist
+        if (viewModel.isPlaying){
+            binding.activityMainPlaybackPlay.setImageResource(androidx.media3.ui.R.drawable.exo_icon_pause)
+        }else{
+            binding.activityMainPlaybackPlay.setImageResource(R.drawable.baseline_play_arrow_24)
         }
     }
 
