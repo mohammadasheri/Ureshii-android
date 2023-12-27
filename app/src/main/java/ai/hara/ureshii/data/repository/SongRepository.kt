@@ -3,13 +3,16 @@ package ai.hara.ureshii.data.repository
 
 import ai.hara.ureshii.data.model.Song
 import ai.hara.ureshii.data.service.SongService
-import ai.hara.ureshii.util.AppExecutors
-import ai.hara.ureshii.util.network.ApiResponse
-import ai.hara.ureshii.util.network.NetworkBoundResource
-import ai.hara.ureshii.util.network.Resource
-import androidx.lifecycle.LiveData
+import ai.hara.ureshii.util.network.NetworkHelper
+import ai.hara.ureshii.util.network.ResultWrapper
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
-class SongRepository(private val service: SongService, private val executor: AppExecutors) {
+class SongRepository(
+    private val service: SongService,
+    private val networkHelper: NetworkHelper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) {
 //
 //    fun likeSong(songId: Int): LiveData<Resource<SearchResult>> {
 //        return object : NetworkBoundResource<SearchResult, SearchResult>(executor) {
@@ -44,11 +47,9 @@ class SongRepository(private val service: SongService, private val executor: App
 //        }.asLiveData()
 //    }
 
-    fun getSongs(): LiveData<Resource<List<Song>>> {
-        return object : NetworkBoundResource<List<Song>, List<Song>>(executor) {
-            override fun createCall(): LiveData<ApiResponse<List<Song>>> {
-                return service.getSongs()
-            }
-        }.asLiveData()
+    suspend fun getSongs(): ResultWrapper<List<Song>> {
+        return networkHelper.safeApiCall(dispatcher) {
+            service.getSongs()
+        }
     }
 }

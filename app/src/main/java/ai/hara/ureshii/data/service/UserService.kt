@@ -12,8 +12,8 @@ import retrofit2.http.HTTP
 interface UserService {
 
     @HTTP(method = HTTPVerb.POST, path = "user/create", hasBody = true)
-    fun registerUser(@Body body: RegisterUserRequest): LiveData<ApiResponse<RegisterUserResponse>>
+    fun registerUser(@Body body: RegisterUserRequest): RegisterUserResponse
 
     @HTTP(method = HTTPVerb.POST, path = "user/login", hasBody = true)
-    fun loginUser(@Body body: RegisterUserRequest): LiveData<ApiResponse<LoginUserResponse>>
+    fun loginUser(@Body body: RegisterUserRequest): LoginUserResponse
 }

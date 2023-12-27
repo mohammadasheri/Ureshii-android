@@ -98,10 +98,12 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-scalars:2.9.0")
 
     //compose
-    implementation ("androidx.activity:activity-compose:1.8.1")
+    implementation ("androidx.activity:activity-compose:1.8.2")
     implementation ("androidx.compose.ui:ui:1.5.4")
     implementation ("androidx.compose.material:material:1.5.4")
     implementation ("androidx.compose.ui:ui-tooling:1.5.4")
+    implementation("androidx.navigation:navigation-compose:2.7.6")
+
 
 }
 

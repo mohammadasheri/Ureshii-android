@@ -34,5 +34,5 @@ interface SongService {
             : LiveData<ApiResponse<SearchResult>>
 
     @HTTP(method = HTTPVerb.GET, path = "song/list", hasBody = false)
-    fun getSongs(): LiveData<ApiResponse<List<Song>>>
+    suspend fun getSongs(): List<Song>
 }

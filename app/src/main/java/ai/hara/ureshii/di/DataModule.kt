@@ -6,11 +6,10 @@ import ai.hara.ureshii.data.repository.UserRepository
 import ai.hara.ureshii.data.service.PlaylistService
 import ai.hara.ureshii.data.service.SongService
 import ai.hara.ureshii.data.service.UserService
-import ai.hara.ureshii.util.AppExecutors
-import ai.hara.ureshii.util.network.LiveDataCallAdapterFactory
 import ai.hara.ureshii.util.TokenAuthenticator
 import ai.hara.ureshii.util.getHostURL
 import ai.hara.ureshii.util.network.AuthorizationInterceptor
+import ai.hara.ureshii.util.network.NetworkHelper
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.GsonBuilder
@@ -33,23 +32,23 @@ class DataModule {
     @Singleton
     fun providePlaylistRepository(
         playlistApiServices: PlaylistService,
-        executors: AppExecutors
-    ): PlaylistRepository = PlaylistRepository(playlistApiServices, executors)
+        networkHelper: NetworkHelper,
+    ): PlaylistRepository = PlaylistRepository(playlistApiServices, networkHelper)
 
 
     @Provides
     @Singleton
     fun provideSongRepository(
         songApiServices: SongService,
-        executors: AppExecutors
-    ): SongRepository = SongRepository(songApiServices, executors)
+        networkHelper: NetworkHelper,
+    ): SongRepository = SongRepository(songApiServices, networkHelper)
 
     @Provides
     @Singleton
     fun provideUserRepository(
         userApiServices: UserService,
-        executors: AppExecutors
-    ): UserRepository = UserRepository(userApiServices, executors)
+        networkHelper: NetworkHelper,
+    ): UserRepository = UserRepository(userApiServices, networkHelper)
 
 
     @Provides
@@ -71,7 +70,16 @@ class DataModule {
     @Singleton
     @Provides
     fun provideSharedPreference(@ApplicationContext context: Context): SharedPreferences {
-        return context.getSharedPreferences(context.packageName + "_preferences", Context.MODE_PRIVATE)
+        return context.getSharedPreferences(
+            context.packageName + "_preferences",
+            Context.MODE_PRIVATE
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideNetworkHelper(): NetworkHelper {
+        return NetworkHelper()
     }
 
     @Provides
@@ -82,7 +90,6 @@ class DataModule {
             .baseUrl(getHostURL())
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .build()
     }
 

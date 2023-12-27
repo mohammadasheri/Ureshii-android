@@ -8,5 +8,5 @@ import retrofit2.http.HTTP
 
 interface PlaylistService {
     @HTTP(method = HTTPVerb.GET, path = "playlist/list", hasBody = false)
-    fun getPlaylists(): LiveData<ApiResponse<List<Playlist>>>
+    suspend fun getPlaylists(): List<Playlist>
 }

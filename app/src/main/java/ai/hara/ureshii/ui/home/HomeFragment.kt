@@ -21,6 +21,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -53,20 +54,20 @@ class HomeFragment : Fragment() {
         homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
-        homeViewModel.getSongs().observe(viewLifecycleOwner) { response ->
-            when (response.status) {
-                Status.ERROR -> mainViewModel.isLoggedOut.value = true
-                Status.SUCCESS -> homeViewModel.songs.addAll(response.data!!)
-                else -> {}
-            }
-        }
-        homeViewModel.getPlaylists().observe(viewLifecycleOwner) { response ->
-            when (response.status) {
-                Status.ERROR -> mainViewModel.isLoggedOut.value = true
-                Status.SUCCESS -> homeViewModel.playlists.addAll(response.data!!)
-                else -> {}
-            }
-        }
+//        homeViewModel.getSongs().observe(viewLifecycleOwner) { response ->
+//            when (response.status) {
+//                Status.ERROR -> mainViewModel.isLoggedOut.value = true
+//                Status.SUCCESS -> homeViewModel.songs.addAll(response.data!!)
+//                else -> {}
+//            }
+//        }
+//        homeViewModel.getPlaylists().observe(viewLifecycleOwner) { response ->
+//            when (response.status) {
+//                Status.ERROR -> mainViewModel.isLoggedOut.value = true
+//                Status.SUCCESS -> homeViewModel.playlists.addAll(response.data!!)
+//                else -> {}
+//            }
+//        }
         return ComposeView(requireContext()).apply {
             // Dispose of the Composition when the view's LifecycleOwner
             // is destroyed
@@ -80,6 +81,10 @@ class HomeFragment : Fragment() {
                         item {
                             HomeSongList()
                         }
+                    }
+                    DisposableEffect(Unit) {
+                        homeViewModel.getSongs()
+                        onDispose {}
                     }
                 }
             }

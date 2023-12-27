@@ -31,8 +31,8 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     var duration by savedStateHandle.saveable { mutableStateOf(0L) }
+    val showPlayerView by savedStateHandle.saveable { mutableStateOf(false) }
     val selectedSong = mutableStateOf(MediaItem.Builder().build())
-    val tempSelectedSongLiveData = MutableLiveData<MediaItem>()
     var progress by savedStateHandle.saveable { mutableStateOf(0f) }
     var progressString by savedStateHandle.saveable { mutableStateOf("00:00") }
     var isPlaying by savedStateHandle.saveable { mutableStateOf(false) }
@@ -60,7 +60,6 @@ class MainViewModel @Inject constructor(
 
                     is SimpleMediaState.TrackChange -> {
                         selectedSong.value = simpleMediaServiceHandler.getCurrentMediaItem()!!
-                        tempSelectedSongLiveData.value = simpleMediaServiceHandler.getCurrentMediaItem()
                     }
                 }
             }
@@ -84,6 +83,7 @@ class MainViewModel @Inject constructor(
                 progress = event.newProgress
                 simpleMediaServiceHandler.onPlayerEvent(event)
             }
+
             else -> {}
         }
     }

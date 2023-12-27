@@ -3,18 +3,18 @@ package ai.hara.ureshii.data.repository
 
 import ai.hara.ureshii.data.model.Playlist
 import ai.hara.ureshii.data.service.PlaylistService
-import ai.hara.ureshii.util.AppExecutors
-import ai.hara.ureshii.util.network.ApiResponse
-import ai.hara.ureshii.util.network.NetworkBoundResource
-import ai.hara.ureshii.util.network.Resource
-import androidx.lifecycle.LiveData
+import ai.hara.ureshii.util.network.NetworkHelper
+import ai.hara.ureshii.util.network.ResultWrapper
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
-class PlaylistRepository(private val service: PlaylistService, private val executor: AppExecutors) {
-    fun getHomePlaylists(): LiveData<Resource<List<Playlist>>> {
-        return object : NetworkBoundResource<List<Playlist>, List<Playlist>>(executor) {
-            override fun createCall(): LiveData<ApiResponse<List<Playlist>>> {
-                return service.getPlaylists()
-            }
-        }.asLiveData()
+class PlaylistRepository(
+    private val service: PlaylistService, private val networkHelper: NetworkHelper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) {
+    suspend fun getHomePlaylists(): ResultWrapper<List<Playlist>> {
+        return networkHelper.safeApiCall(dispatcher) {
+            service.getPlaylists()
+        }
     }
 }

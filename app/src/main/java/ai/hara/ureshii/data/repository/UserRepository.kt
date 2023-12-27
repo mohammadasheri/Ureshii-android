@@ -5,27 +5,28 @@ import ai.hara.ureshii.data.model.LoginUserResponse
 import ai.hara.ureshii.data.model.RegisterUserRequest
 import ai.hara.ureshii.data.model.RegisterUserResponse
 import ai.hara.ureshii.data.service.UserService
-import ai.hara.ureshii.util.AppExecutors
-import ai.hara.ureshii.util.network.ApiResponse
-import ai.hara.ureshii.util.network.NetworkBoundResource
-import ai.hara.ureshii.util.network.Resource
-import androidx.lifecycle.LiveData
+import ai.hara.ureshii.util.network.NetworkHelper
+import ai.hara.ureshii.util.network.ResultWrapper
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
-class UserRepository(private val service: UserService, private val executor: AppExecutors) {
+class UserRepository(
+    private val service: UserService, private val networkHelper: NetworkHelper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) {
 
-    fun registerUser(username: String, password: String): LiveData<Resource<RegisterUserResponse>> {
-        return object : NetworkBoundResource<RegisterUserResponse, RegisterUserResponse>(executor) {
-            override fun createCall(): LiveData<ApiResponse<RegisterUserResponse>> {
-                return service.registerUser(RegisterUserRequest(username, password))
-            }
-        }.asLiveData()
+    suspend fun registerUser(
+        username: String,
+        password: String
+    ): ResultWrapper<RegisterUserResponse> {
+        return networkHelper.safeApiCall(dispatcher) {
+            service.registerUser(RegisterUserRequest(username, password))
+        }
     }
 
-    fun loginUser(username: String, password: String): LiveData<Resource<LoginUserResponse>> {
-        return object : NetworkBoundResource<LoginUserResponse, LoginUserResponse>(executor) {
-            override fun createCall(): LiveData<ApiResponse<LoginUserResponse>> {
-                return service.loginUser(RegisterUserRequest(username, password))
-            }
-        }.asLiveData()
+    suspend fun loginUser(username: String, password: String): ResultWrapper<LoginUserResponse> {
+        return networkHelper.safeApiCall(dispatcher) {
+            service.loginUser(RegisterUserRequest(username, password))
+        }
     }
 }

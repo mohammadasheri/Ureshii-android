@@ -1,15 +1,26 @@
 package ai.hara.ureshii.ui.theme
 
+import ai.hara.ureshii.R
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
+val fonts = FontFamily(
+    Font(R.font.sans, FontWeight.Normal),
+    Font(R.font.sans_light,FontWeight.Light),
+    Font(R.font.sans_bold, FontWeight.SemiBold),
+    Font(R.font.sans_bold, FontWeight.ExtraBold)
+)
+
 // Set of Material typography styles to start with
 val Typography = Typography(
+
+
     bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = fonts,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,

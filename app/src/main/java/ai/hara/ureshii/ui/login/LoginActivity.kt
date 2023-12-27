@@ -1,11 +1,6 @@
 package ai.hara.ureshii.ui.login
 
-import ai.hara.ureshii.ui.main.MainActivity
-import ai.hara.ureshii.util.enums.Status
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -77,10 +72,7 @@ class LoginActivity : AppCompatActivity() {
                     end.linkTo(login.start)
                 },
                 onClick = {
-                    registerUser(
-                        registerTextState.value.text,
-                        passwordTextState.value.text
-                    )
+                    viewModel.register(registerTextState.value.text, passwordTextState.value.text)
                 }) {
                 Text(text = "ثبت نام", color = Color.White)
             }
@@ -99,34 +91,19 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun registerUser(username: String, password: String) {
-        viewModel.register(username, password).observe(this) { response ->
-            when (response.status) {
-                Status.SUCCESS -> Toast.makeText(
-                    this,
-                    "ثبت نام انجام شد. لطفا وارد شوید",
-                    Toast.LENGTH_LONG
-                ).show()
-                else -> {
-                    Log.e("Mohammad", response.error.toString())
-                }
-            }
-        }
-    }
-
     private fun loginUser(username: String, password: String) {
-        viewModel.login(username, password).observe(this) { response ->
-            when (response.status) {
-                Status.SUCCESS -> {
-                    viewModel.saveToken(response.data!!.token)
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-                else -> {
-                    Log.e("Mohammad", response.error.toString())
-                }
-            }
-        }
+//        viewModel.login(username, password).observe(this) { response ->
+//            when (response.status) {
+//                Status.SUCCESS -> {
+//                    viewModel.saveToken(response.data!!.token)
+//                    val intent = Intent(this, MainActivity::class.java)
+//                    startActivity(intent)
+//                    finish()
+//                }
+//                else -> {
+//                    Log.e("Mohammad", response.error.toString())
+//                }
+//            }
+//        }
     }
 }
