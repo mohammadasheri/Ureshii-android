@@ -73,19 +73,18 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun onUIEvent(uiEvent: UIEvent) = viewModelScope.launch {
-        when (uiEvent) {
-            UIEvent.Backward -> simpleMediaServiceHandler.onPlayerEvent(PlayerEvent.Backward)
-            UIEvent.Forward -> simpleMediaServiceHandler.onPlayerEvent(PlayerEvent.Forward)
-            UIEvent.PlayPause -> simpleMediaServiceHandler.onPlayerEvent(PlayerEvent.PlayPause)
-            is UIEvent.UpdateProgress -> {
-                progress = uiEvent.newProgress
-                simpleMediaServiceHandler.onPlayerEvent(
-                    PlayerEvent.UpdateProgress(
-                        uiEvent.newProgress
-                    )
-                )
+    fun onUIEvent(event: PlayerEvent) = viewModelScope.launch {
+        when (event) {
+            PlayerEvent.Backward -> simpleMediaServiceHandler.onPlayerEvent(event)
+            is PlayerEvent.Repeat -> simpleMediaServiceHandler.onPlayerEvent(event)
+            PlayerEvent.Shuffle -> simpleMediaServiceHandler.onPlayerEvent(event)
+            PlayerEvent.Forward -> simpleMediaServiceHandler.onPlayerEvent(event)
+            PlayerEvent.PlayPause -> simpleMediaServiceHandler.onPlayerEvent(event)
+            is PlayerEvent.UpdateProgress -> {
+                progress = event.newProgress
+                simpleMediaServiceHandler.onPlayerEvent(event)
             }
+            else -> {}
         }
     }
 
@@ -121,13 +120,6 @@ class MainViewModel @Inject constructor(
         }
         simpleMediaServiceHandler.addMediaItemList(mediaItemList, startIndex, 0)
     }
-}
-
-sealed class UIEvent {
-    object PlayPause : UIEvent()
-    object Backward : UIEvent()
-    object Forward : UIEvent()
-    data class UpdateProgress(val newProgress: Float) : UIEvent()
 }
 
 sealed class UIState {

@@ -39,10 +39,10 @@ class SimpleMediaServiceHandler @Inject constructor(
         return player.currentMediaItem
     }
 
-    suspend fun onPlayerEvent(playerEvent: PlayerEvent) {
-        when (playerEvent) {
-            PlayerEvent.Backward -> player.seekBack()
-            PlayerEvent.Forward -> player.seekForward()
+    suspend fun onPlayerEvent(event: PlayerEvent) {
+        when (event) {
+            PlayerEvent.Backward -> player.seekToPrevious()
+            PlayerEvent.Forward -> player.seekToNext()
             PlayerEvent.PlayPause -> {
                 if (player.isPlaying) {
                     player.pause()
@@ -55,7 +55,9 @@ class SimpleMediaServiceHandler @Inject constructor(
             }
 
             PlayerEvent.Stop -> stopProgressUpdate()
-            is PlayerEvent.UpdateProgress -> player.seekTo((player.duration * playerEvent.newProgress).toLong())
+            is PlayerEvent.UpdateProgress -> player.seekTo((player.duration * event.newProgress).toLong())
+            is PlayerEvent.Repeat -> player.repeatMode = event.repeatMode
+            PlayerEvent.Shuffle -> player.shuffleModeEnabled = true
         }
     }
 
@@ -101,21 +103,4 @@ class SimpleMediaServiceHandler @Inject constructor(
         job?.cancel()
         _simpleMediaState.value = SimpleMediaState.Playing(isPlaying = false)
     }
-}
-
-sealed class PlayerEvent {
-    object PlayPause : PlayerEvent()
-    object Backward : PlayerEvent()
-    object Forward : PlayerEvent()
-    object Stop : PlayerEvent()
-    data class UpdateProgress(val newProgress: Float) : PlayerEvent()
-}
-
-sealed class SimpleMediaState {
-    object Initial : SimpleMediaState()
-    data class Ready(val duration: Long) : SimpleMediaState()
-    data class Progress(val progress: Long) : SimpleMediaState()
-    data class Buffering(val progress: Long) : SimpleMediaState()
-    data class Playing(val isPlaying: Boolean) : SimpleMediaState()
-    data class TrackChange(val isChanged:Boolean) : SimpleMediaState()
 }

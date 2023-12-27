@@ -2,6 +2,7 @@ package ai.hara.ureshii.ui.main
 
 import ai.hara.ureshii.R
 import ai.hara.ureshii.databinding.ActivityMainBinding
+import ai.hara.ureshii.service.PlayerEvent
 import ai.hara.ureshii.service.SimpleMediaService
 import ai.hara.ureshii.ui.login.LoginActivity
 import ai.hara.ureshii.ui.player.PlayerFragment
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val navView: BottomNavigationView = binding.navView
-        viewModel.onUIEvent(UIEvent.PlayPause)
+        viewModel.onUIEvent(PlayerEvent.PlayPause)
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navView.setupWithNavController(navController)
         startService()
