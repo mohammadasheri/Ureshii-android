@@ -1,4 +1,4 @@
-package ai.hara.ureshii.ui.main
+package ai.hara.ureshii.ui.search
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize

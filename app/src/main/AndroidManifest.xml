@@ -39,7 +39,7 @@
 
         <activity
             android:name="ai.hara.ureshii.ui.login.LoginActivity"
-            android:theme="@style/Theme.Ureshii" />
+            android:theme="@style/Theme.App.First" />
 
         <service
             android:name="ai.hara.ureshii.service.SimpleMediaService"

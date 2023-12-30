@@ -4,25 +4,32 @@ import ai.hara.ureshii.data.model.Playlist
 import ai.hara.ureshii.data.model.Song
 import ai.hara.ureshii.data.repository.PlaylistRepository
 import ai.hara.ureshii.data.repository.SongRepository
-import ai.hara.ureshii.util.network.Resource
 import ai.hara.ureshii.util.network.ResultWrapper
 import androidx.compose.runtime.mutableStateListOf
-import androidx.lifecycle.LiveData
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
+import androidx.lifecycle.viewmodel.compose.saveable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
+
 @HiltViewModel
+@OptIn(SavedStateHandleSaveableApi::class)
 class HomeViewModel @Inject constructor(
     private var repository: SongRepository,
-    private var playlistRepository: PlaylistRepository
+    private var playlistRepository: PlaylistRepository,
+    savedStateHandle: SavedStateHandle
+
 ) : ViewModel() {
 
     var songs = mutableStateListOf<Song>()
     var playlists = mutableStateListOf<Playlist>()
+    var isLoggedIn by savedStateHandle.saveable { mutableStateOf(true) }
 
     fun getSongs() {
         viewModelScope.launch {
@@ -34,12 +41,15 @@ class HomeViewModel @Inject constructor(
                     songs.addAll(response.value)
                     Timber.tag("Mohamamd").i(response.value.toString())
                 }
+
+                is ResultWrapper.AuthorizationError -> isLoggedIn = false
             }
 
             when (val response = playlistRepository.getHomePlaylists()) {
                 is ResultWrapper.NetworkError -> Timber.tag("Mohamamd").i(response.error)
                 is ResultWrapper.Error -> Timber.tag("Mohamamd").i(response.error.toString())
                 is ResultWrapper.Success -> Timber.tag("Mohamamd").i(response.value.toString())
+                is ResultWrapper.AuthorizationError -> isLoggedIn = false
             }
         }
     }

@@ -36,7 +36,8 @@ class MainViewModel @Inject constructor(
     var progress by savedStateHandle.saveable { mutableStateOf(0f) }
     var progressString by savedStateHandle.saveable { mutableStateOf("00:00") }
     var isPlaying by savedStateHandle.saveable { mutableStateOf(false) }
-    var isLoggedOut = MutableLiveData(false)
+    var isLoggedIn by savedStateHandle.saveable { mutableStateOf(true) }
+
     private val _loading = MutableStateFlow(true)
     val loading = _loading.asStateFlow()
     private val _uiState = MutableStateFlow<UIState>(UIState.Initial)

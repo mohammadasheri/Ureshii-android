@@ -36,6 +36,9 @@ fun HomeScreen(
     mainViewModel: MainViewModel,
     viewmodel: HomeViewModel
 ) {
+    if(!viewmodel.isLoggedIn){
+        mainViewModel.isLoggedIn = viewmodel.isLoggedIn
+    }
     LazyColumn(
         modifier = Modifier
             .background(Color.Red)

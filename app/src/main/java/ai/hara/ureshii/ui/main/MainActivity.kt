@@ -6,7 +6,9 @@ import ai.hara.ureshii.ui.home.HomeScreen
 import ai.hara.ureshii.ui.home.HomeViewModel
 import ai.hara.ureshii.ui.items
 import ai.hara.ureshii.ui.library.LibraryScreen
+import ai.hara.ureshii.ui.login.LoginActivity
 import ai.hara.ureshii.ui.player.PlayerScreen
+import ai.hara.ureshii.ui.search.SearchScreen
 import ai.hara.ureshii.ui.theme.UreshiiTheme
 import android.content.Intent
 import android.os.Bundle
@@ -47,8 +49,13 @@ class MainActivity : ComponentActivity() {
                 mainViewModel.loading.value
             }
         }
-
         setContent {
+            if (!mainViewModel.isLoggedIn){
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+
             UreshiiTheme {
                 val navController = rememberNavController()
                 Scaffold(
@@ -120,9 +127,7 @@ class MainActivity : ComponentActivity() {
 //
 //        viewModel.isLoggedOut.observe(this){isLoggedOut->
 //            if (isLoggedOut){
-//                val intent = Intent(this, LoginActivity::class.java)
-//                startActivity(intent)
-//                finish()
+
 //            }
 //        }
 //

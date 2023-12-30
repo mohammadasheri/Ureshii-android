@@ -22,7 +22,11 @@ class NetworkHelper {
                             code,
                             throwable.response()?.errorBody()?.source().toString()
                         )
-                        ResultWrapper.Error(code, errorResponse)
+                        if (code == 401) {
+                            ResultWrapper.AuthorizationError(code, errorResponse)
+                        } else {
+                            ResultWrapper.Error(code, errorResponse)
+                        }
                     }
 
                     else -> {

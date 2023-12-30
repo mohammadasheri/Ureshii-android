@@ -1,6 +1,10 @@
 package ai.hara.ureshii.ui.login
 
+import ai.hara.ureshii.ui.main.MainActivity
+import ai.hara.ureshii.ui.theme.UreshiiTheme
+import android.content.Intent
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -23,15 +27,22 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : ComponentActivity() {
     private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContent {
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                ConstraintLayoutContent()
+            UreshiiTheme {
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                    ConstraintLayoutContent()
+                }
+            }
+            if(viewModel.isLoggedIn){
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
             }
         }
     }
@@ -81,7 +92,7 @@ class LoginActivity : AppCompatActivity() {
                 start.linkTo(register.end)
                 end.linkTo(parent.end)
             }, onClick = {
-                loginUser(
+                viewModel.login(
                     registerTextState.value.text,
                     passwordTextState.value.text
                 )
@@ -89,21 +100,5 @@ class LoginActivity : AppCompatActivity() {
                 Text(text = "ورود", color = Color.White)
             }
         }
-    }
-
-    private fun loginUser(username: String, password: String) {
-//        viewModel.login(username, password).observe(this) { response ->
-//            when (response.status) {
-//                Status.SUCCESS -> {
-//                    viewModel.saveToken(response.data!!.token)
-//                    val intent = Intent(this, MainActivity::class.java)
-//                    startActivity(intent)
-//                    finish()
-//                }
-//                else -> {
-//                    Log.e("Mohammad", response.error.toString())
-//                }
-//            }
-//        }
     }
 }
