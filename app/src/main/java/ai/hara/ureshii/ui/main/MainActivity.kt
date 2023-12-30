@@ -1,5 +1,6 @@
 package ai.hara.ureshii.ui.main
 
+import ai.hara.ureshii.R
 import ai.hara.ureshii.service.SimpleMediaService
 import ai.hara.ureshii.ui.Screen
 import ai.hara.ureshii.ui.home.HomeScreen
@@ -15,15 +16,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -66,9 +71,12 @@ class MainActivity : ComponentActivity() {
                             val currentDestination = navBackStackEntry.value?.destination
                             items.forEach { screen ->
                                 BottomNavigationItem(
+                                    selectedContentColor = colorResource(R.color.white),
+                                    unselectedContentColor = colorResource(R.color.white),
+//                                    modifier = Modifier.background(colorResource(R.color.navigation)),
                                     icon = {
                                         Icon(
-                                            Icons.Filled.Favorite,
+                                            screen.icon,
                                             contentDescription = null
                                         )
                                     },
