@@ -34,22 +34,24 @@ class HomeViewModel @Inject constructor(
     fun getSongs() {
         viewModelScope.launch {
             when (val response = repository.getSongs()) {
-                is ResultWrapper.NetworkError -> Timber.tag("Mohamamd").i(response.error)
                 is ResultWrapper.Error -> Timber.tag("Mohamamd").i(response.error.toString())
                 is ResultWrapper.Success -> {
                     songs.clear()
                     songs.addAll(response.value)
                     Timber.tag("Mohamamd").i(response.value.toString())
                 }
-
                 is ResultWrapper.AuthorizationError -> isLoggedIn = false
+                is ResultWrapper.NetworkError -> isLoggedIn = false
             }
 
             when (val response = playlistRepository.getHomePlaylists()) {
-                is ResultWrapper.NetworkError -> Timber.tag("Mohamamd").i(response.error)
                 is ResultWrapper.Error -> Timber.tag("Mohamamd").i(response.error.toString())
-                is ResultWrapper.Success -> Timber.tag("Mohamamd").i(response.value.toString())
+                is ResultWrapper.Success -> {
+                    playlists.clear()
+                    playlists.addAll(response.value)
+                }
                 is ResultWrapper.AuthorizationError -> isLoggedIn = false
+                is ResultWrapper.NetworkError -> Timber.tag("Mohamamd").i(response.error)
             }
         }
     }

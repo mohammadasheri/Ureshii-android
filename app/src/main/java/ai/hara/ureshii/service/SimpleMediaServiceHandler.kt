@@ -15,7 +15,7 @@ class SimpleMediaServiceHandler @Inject constructor(
     private val player: ExoPlayer
 ) : Player.Listener {
 
-    private val _simpleMediaState = MutableStateFlow<SimpleMediaState>(SimpleMediaState.Initial)
+    private val _simpleMediaState = MutableStateFlow<SimpleMediaState>(SimpleMediaState.Playing(true))
     val simpleMediaState = _simpleMediaState.asStateFlow()
 
     private var job: Job? = null

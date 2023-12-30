@@ -14,6 +14,7 @@ sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon:
     object Search : Screen("search", R.string.title_search, Icons.Filled.Search)
     object Library : Screen("library", R.string.title_library, Icons.Filled.Face)
     object Player : Screen("player", R.string.title_player, Icons.Filled.PlayArrow)
+    object None : Screen("None", R.string.title_none, Icons.Filled.PlayArrow)
 }
 
 val items = listOf(

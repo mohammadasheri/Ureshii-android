@@ -7,7 +7,6 @@ import ai.hara.ureshii.service.SimpleMediaState
 import ai.hara.ureshii.util.getHostURL
 import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,7 +30,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     var duration by savedStateHandle.saveable { mutableStateOf(0L) }
-    val showPlayerView by savedStateHandle.saveable { mutableStateOf(false) }
+    var showPlayerView by savedStateHandle.saveable { mutableStateOf(false) }
     val selectedSong = mutableStateOf(MediaItem.Builder().build())
     var progress by savedStateHandle.saveable { mutableStateOf(0f) }
     var progressString by savedStateHandle.saveable { mutableStateOf("00:00") }
@@ -40,25 +39,21 @@ class MainViewModel @Inject constructor(
 
     private val _loading = MutableStateFlow(true)
     val loading = _loading.asStateFlow()
-    private val _uiState = MutableStateFlow<UIState>(UIState.Initial)
-    val uiState = _uiState.asStateFlow()
 
     init {
         simpleMediaServiceHandler
         viewModelScope.launch {
             delay(200)
             _loading.value = false
+            onPlayerEvent(PlayerEvent.PlayPause)
             simpleMediaServiceHandler.simpleMediaState.collect { mediaState ->
                 when (mediaState) {
                     is SimpleMediaState.Buffering -> calculateProgressValues(mediaState.progress)
-                    SimpleMediaState.Initial -> _uiState.value = UIState.Initial
                     is SimpleMediaState.Playing -> isPlaying = mediaState.isPlaying
                     is SimpleMediaState.Progress -> calculateProgressValues(mediaState.progress)
                     is SimpleMediaState.Ready -> {
                         duration = mediaState.duration
-                        _uiState.value = UIState.Ready
                     }
-
                     is SimpleMediaState.TrackChange -> {
                         selectedSong.value = simpleMediaServiceHandler.getCurrentMediaItem()!!
                     }
@@ -73,7 +68,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun onUIEvent(event: PlayerEvent) = viewModelScope.launch {
+    fun onPlayerEvent(event: PlayerEvent) = viewModelScope.launch {
         when (event) {
             PlayerEvent.Backward -> simpleMediaServiceHandler.onPlayerEvent(event)
             is PlayerEvent.Repeat -> simpleMediaServiceHandler.onPlayerEvent(event)
@@ -102,6 +97,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun loadData(songs: List<Song>, startIndex: Int) {
+        showPlayerView = true
         val mediaItemList = mutableListOf<MediaItem>()
         songs.forEach { song ->
             mediaItemList.add(
@@ -121,9 +117,4 @@ class MainViewModel @Inject constructor(
         }
         simpleMediaServiceHandler.addMediaItemList(mediaItemList, startIndex, 0)
     }
-}
-
-sealed class UIState {
-    object Initial : UIState()
-    object Ready : UIState()
 }

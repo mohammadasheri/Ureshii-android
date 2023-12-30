@@ -1,7 +1,6 @@
 package ai.hara.ureshii.service
 
 sealed class SimpleMediaState {
-    object Initial : SimpleMediaState()
     data class Ready(val duration: Long) : SimpleMediaState()
     data class Progress(val progress: Long) : SimpleMediaState()
     data class Buffering(val progress: Long) : SimpleMediaState()

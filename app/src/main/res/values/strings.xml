@@ -4,6 +4,7 @@
     <string name="title_search">جستجو</string>
     <string name="title_library">کتابخانه</string>
     <string name="title_player">پخش‌کننده</string>
+    <string name="title_none">None</string>
     <string name="new_playlists">پلی‌لیست جدید</string>
     <string name="new_songs">آهنگ‌های جدید</string>
 </resources>

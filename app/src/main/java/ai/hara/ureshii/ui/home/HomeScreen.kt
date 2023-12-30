@@ -1,6 +1,7 @@
 package ai.hara.ureshii.ui.home
 
 import ai.hara.ureshii.R
+import ai.hara.ureshii.service.PlayerEvent
 import ai.hara.ureshii.ui.main.MainViewModel
 import ai.hara.ureshii.util.getHostURL
 import androidx.compose.foundation.background
@@ -40,9 +41,7 @@ fun HomeScreen(
         mainViewModel.isLoggedIn = viewmodel.isLoggedIn
     }
     LazyColumn(
-        modifier = Modifier
-            .background(Color.Red)
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize().background(colorResource(R.color.background)),
     ) {
         item {
             HomePlayLists(mainViewModel, viewmodel)
