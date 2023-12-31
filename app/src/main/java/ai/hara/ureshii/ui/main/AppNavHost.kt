@@ -23,16 +23,10 @@ fun BottomNavHost(
     innerPadding: PaddingValues
 ) {
     NavHost(
-        navController,
-        startDestination = Screen.Home.route,
-        Modifier.padding(innerPadding)
+        navController, startDestination = Screen.Home.route, Modifier.padding(innerPadding)
     ) {
         composable(Screen.Home.route) {
-            HomeScreen(
-                navController,
-                mainViewModel,
-                homeViewModel
-            )
+            HomeScreen(navController, mainViewModel, homeViewModel)
         }
         composable(Screen.Search.route) { SearchScreen(navController) }
         composable(Screen.Library.route) { LibraryScreen(navController) }
@@ -47,11 +41,7 @@ fun MainNavHost(
 ) {
     NavHost(navController, startDestination = Screen.None.route) {
         composable(Screen.Player.route) {
-            PlayerScreen(
-                navController,
-                mainViewModel,
-                playerViewModel
-            )
+            PlayerScreen(mainViewModel, playerViewModel)
         }
         composable(Screen.None.route) {
             mainViewModel.showPlayerView = false

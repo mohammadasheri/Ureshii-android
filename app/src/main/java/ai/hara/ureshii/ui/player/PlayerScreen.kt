@@ -2,19 +2,17 @@ package ai.hara.ureshii.ui.player
 
 import ai.hara.ureshii.R
 import ai.hara.ureshii.service.PlayerEvent
-import ai.hara.ureshii.ui.home.HomeViewModel
 import ai.hara.ureshii.ui.main.MainViewModel
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -34,17 +32,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.media3.common.MediaItem
-import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 
 @Composable
-fun PlayerScreen(navController: NavHostController,
-                 mainViewModel: MainViewModel,
-                 viewmodel: PlayerViewModel
+fun PlayerScreen(
+    mainViewModel: MainViewModel,
+    viewmodel: PlayerViewModel
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        PlayerScreenDetail(mainViewModel,
+        PlayerScreenDetail(
+            mainViewModel,
             mainViewModel.selectedSong.value
         )
     }
@@ -142,31 +140,33 @@ private fun PlayerScreenDetail(mainViewModel: MainViewModel, song: MediaItem) {
             }
         )
 
-        Image(
-            painter = painterResource(
-                id = if (mainViewModel.isPlaying)
-                    androidx.media3.ui.R.drawable.exo_icon_pause else
-                    R.drawable.baseline_play_arrow_24
-            ),
-            contentDescription = "",
-            colorFilter = ColorFilter.tint(Color.Black),
+        Surface(color = MaterialTheme.colorScheme.primary,
+            shape = RoundedCornerShape(45.dp),
             modifier = Modifier
                 .padding(top = 32.dp)
-                .width(56.dp)
-                .aspectRatio(1f)
-                .background(
-                    color = Color.White,
-                    shape = CircleShape
-                )
                 .constrainAs(play) {
                     top.linkTo(slider.bottom)
                     start.linkTo(next.end)
                     end.linkTo(previous.start)
-                }
-                .clickable {
-                    mainViewModel.onPlayerEvent(PlayerEvent.PlayPause)
-                }
-        )
+                }) {
+            Image(
+                painter = painterResource(
+                    id = if (mainViewModel.isPlaying)
+                        R.drawable.baseline_pause else
+                        R.drawable.baseline_play_arrow_24
+                ),
+                contentDescription = "",
+                colorFilter = ColorFilter.tint(Color.Black),
+                modifier = Modifier
+                    .width(50.dp)
+                    .padding(8.dp)
+                    .aspectRatio(1f)
+                    .clickable {
+                        mainViewModel.onPlayerEvent(PlayerEvent.PlayPause)
+                    }
+            )
+        }
+
 
         Image(
             painter = painterResource(id = R.drawable.baseline_skip_next_24),

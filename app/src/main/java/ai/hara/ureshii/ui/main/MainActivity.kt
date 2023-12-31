@@ -12,6 +12,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -40,19 +43,25 @@ class MainActivity : ComponentActivity() {
                 startActivity(intent)
                 finish()
             }
-
-            UreshiiTheme {
-                val bottomNavController = rememberNavController()
-                val outNavController = rememberNavController()
-                Scaffold(
-                    bottomBar = { BottomBar(navController = bottomNavController) }
-                ) { innerPadding ->
-                    BottomNavHost(bottomNavController, mainViewModel, homeViewModel, innerPadding)
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                UreshiiTheme {
+                    val bottomNavController = rememberNavController()
+                    val outNavController = rememberNavController()
+                    Scaffold(
+                        bottomBar = { BottomBar(navController = bottomNavController) }
+                    ) { innerPadding ->
+                        BottomNavHost(
+                            bottomNavController,
+                            mainViewModel,
+                            homeViewModel,
+                            innerPadding
+                        )
+                    }
+                    if (mainViewModel.showPlayerView) {
+                        navigateToScreen(outNavController, Screen.Player.route)
+                    }
+                    MainNavHost(outNavController, mainViewModel, playerViewModel)
                 }
-                if (mainViewModel.showPlayerView) {
-                    navigateToScreen(outNavController, Screen.Player.route)
-                }
-                MainNavHost(outNavController, mainViewModel, playerViewModel)
             }
         }
         actionBar?.hide()
