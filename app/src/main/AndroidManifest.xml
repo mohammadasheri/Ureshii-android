@@ -5,13 +5,13 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
-    <uses-permission android:name="android.permission.WRITE_MEDIA_IMAGES"/>
-    <uses-permission android:name="android.permission.WRITE_MEDIA_VIDEO"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.WRITE_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.WRITE_MEDIA_VIDEO" />
 
     <application
-        android:name="ai.hara.bnvt.SimpleMediaPlayerApp"
+        android:name="ai.hara.ureshii.SimpleMediaPlayerApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -19,12 +19,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BNVT"
+        android:theme="@style/Theme.App.First"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name="ai.hara.bnvt.ui.main.MainActivity"
+            android:name="ai.hara.ureshii.ui.main.MainActivity"
             android:exported="true"
-            android:label="@string/app_name">
+            android:theme="@style/Theme.App.First">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,8 +37,12 @@
                 android:value="" />
         </activity>
 
+        <activity
+            android:name="ai.hara.ureshii.ui.login.LoginActivity"
+            android:theme="@style/Theme.App.First" />
+
         <service
-            android:name="ai.hara.bnvt.service.SimpleMediaService"
+            android:name="ai.hara.ureshii.service.SimpleMediaService"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
     </application>
