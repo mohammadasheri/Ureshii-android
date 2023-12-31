@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
                     val bottomNavController = rememberNavController()
                     val outNavController = rememberNavController()
                     Scaffold(
-                        bottomBar = { BottomBar(navController = bottomNavController) }
+                        bottomBar = { BottomBar(navController = bottomNavController,mainViewModel) }
                     ) { innerPadding ->
                         BottomNavHost(
                             bottomNavController,

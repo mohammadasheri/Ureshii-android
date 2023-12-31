@@ -104,6 +104,7 @@ dependencies {
     implementation ("androidx.compose.ui:ui-tooling:1.5.4")
     implementation("androidx.navigation:navigation-compose:2.7.6")
 
+    implementation("com.github.SmartToolFactory:Compose-Colorful-Sliders:1.2.2")
 
 }
 
