@@ -56,7 +56,7 @@ fun HomeScreen(
             HomeSongList(mainViewModel, viewModel)
         }
     }
-    HomeNavHost(navController = navController)
+    HomeNavHost(navController = navController,viewModel)
     DisposableEffect(Unit) {
         viewModel.getSongs()
         onDispose {}
@@ -78,7 +78,7 @@ fun HomePlayLists(
     )
     LazyRow {
         itemsIndexed(viewmodel.playlists) { index, item ->
-            PlaylistItem(navController, mainViewModel, viewmodel, item)
+            PlaylistItem(navController, mainViewModel, viewmodel, item,index)
         }
     }
 }
@@ -109,7 +109,8 @@ fun PlaylistItem(
     navController: NavHostController,
     mainViewModel: MainViewModel,
     viewmodel: HomeViewModel,
-    item: Playlist
+    item: Playlist,
+    index: Int
 ) {
     Card(backgroundColor = colorResource(R.color.card),
         modifier = Modifier
@@ -117,6 +118,7 @@ fun PlaylistItem(
             .width(115.dp)
             .aspectRatio(0.71f)
             .clickable {
+                viewmodel.selectedPlaylistIndex = index
                 mainViewModel.navigateToScreen(navController, Screen.PlayList.route)
             }
     ) {

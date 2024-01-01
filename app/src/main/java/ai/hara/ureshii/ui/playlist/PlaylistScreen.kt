@@ -1,199 +1,179 @@
 package ai.hara.ureshii.ui.playlist
 
 import ai.hara.ureshii.R
+import ai.hara.ureshii.data.model.Playlist
+import ai.hara.ureshii.util.getHostURL
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.IconButton
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import timber.log.Timber
+
+private val headerHeight = 275.dp
+private val toolbarHeight = 56.dp
+
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@Composable
+fun PlaylistScreen(playlist: Playlist) {
+    val scroll: ScrollState = rememberScrollState(0)
+    val headerHeightPx = with(LocalDensity.current) { headerHeight.toPx() }
+    val toolbarHeightPx = with(LocalDensity.current) { toolbarHeight.toPx() }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                MaterialTheme.colorScheme.surface
+            )
+    ) {
+        Header(playlist, scroll, headerHeightPx)
+        Body(scroll)
+        Toolbar(scroll, headerHeightPx, toolbarHeightPx)
+//        Title()
+    }
+}
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+private fun Header(playlist: Playlist, scroll: ScrollState, headerHeightPx: Float) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(headerHeight)
+            .graphicsLayer {
+                alpha = (-1f / headerHeightPx) * scroll.value + 1
+                translationY = -scroll.value.toFloat() / 2f // Parallax effect
+            }
+    ) {
+        GlideImage(
+            contentScale = ContentScale.FillBounds,
+            model = "${getHostURL()}playlist/picture/download/${playlist.id}",
+            contentDescription = ""
+        )
+        Box(
+            Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(Color.Transparent, Color(0xAA000000)),
+                        startY = 3 * headerHeightPx / 4 // to wrap the title only
+                    )
+                )
+        )
+    }
+}
+
 
 @Composable
-fun PlaylistScreen() {
-    val viewModel: PlaylistViewModel = hiltViewModel()
-    Surface(
-        color = colorResource(id = R.color.background),
-        modifier = Modifier.fillMaxSize()
+private fun Toolbar(scroll: ScrollState, headerHeightPx: Float, toolbarHeightPx: Float) {
+    val toolbarBottom = headerHeightPx - toolbarHeightPx
+    val showToolbar = remember {
+        derivedStateOf {
+            Timber.tag("asdfasf").i("asdfasdf")
+            scroll.value >= toolbarBottom
+        }
+    }
+
+    AnimatedVisibility(
+        visible = showToolbar.value,
+        enter = fadeIn(animationSpec = tween(300)),
+        exit = fadeOut(animationSpec = tween(300))
     ) {
 
+        TopAppBar(
+            modifier = Modifier.background(
+                brush = Brush.horizontalGradient(
+                    listOf(Color(0xff026586), Color(0xff032C45))
+                )
+            ),
+            navigationIcon = {
+                IconButton(
+                    onClick = {},
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .size(36.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = "",
+                        tint = Color.White
+                    )
+                }
+            },
+            title = { Text(text = "Mohammad")},
+            backgroundColor = Color.Transparent,
+            elevation = 0.dp
+        )
     }
-//
-//    GlideImage(
-//        contentScale = ContentScale.Crop,
-//        model = song.mediaMetadata.artworkUri,
-//        contentDescription = "",
-//        modifier = Modifier
-//            .fillMaxSize()
-//    )
-//
-//    Surface(
-//        color = Color.Black.copy(alpha = 0.7f),
-//        modifier = Modifier.fillMaxSize()
-//    ) {
-//
-//    }
-//    ConstraintLayout(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(8.dp)
-//    ) {
-//        val (title, artist, slider, duration, progress, play, next, previous, repeat, shuffle) = createRefs()
-//        Text(
-//            fontSize = 20.sp,
-//            fontWeight = FontWeight.Bold,
-//            text = song.mediaMetadata.displayTitle.toString(),
-//            color = Color.White,
-//            maxLines = 1,
-//            overflow = TextOverflow.Ellipsis,
-//            modifier = Modifier
-//                .padding(top = 16.dp)
-//                .constrainAs(title) {
-//                    top.linkTo(parent.top)
-//                    start.linkTo(parent.start)
-//                    end.linkTo(parent.end)
-//                }
-//        )
-//        Text(
-//            color = Color.White,
-//            text = song.mediaMetadata.artist.toString(),
-//            maxLines = 1,
-//            overflow = TextOverflow.Ellipsis, modifier = Modifier
-//                .constrainAs(artist) {
-//                    top.linkTo(title.bottom)
-//                    start.linkTo(parent.start)
-//                    end.linkTo(parent.end)
-//                }
-//        )
-//        Slider(
-//            value = if (useNewProgressValue.value) sliderPosition.value else mainViewModel.progress,
-//            onValueChange = { newProgress ->
-//                useNewProgressValue.value = true
-//                sliderPosition.value = newProgress
-//                mainViewModel.onPlayerEvent(PlayerEvent.UpdateProgress(newProgress = newProgress))
-//            },
-//            onValueChangeFinished = {
-//                useNewProgressValue.value = false
-//            },
-//            modifier = Modifier
-//                .constrainAs(slider) {
-//                    top.linkTo(artist.bottom)
-//                    bottom.linkTo(parent.bottom)
-//                    start.linkTo(parent.start)
-//                    end.linkTo(parent.end)
-//                })
-//        Text(text = mainViewModel.progressString, color = Color.White,
-//            modifier = Modifier
-//                .constrainAs(duration) {
-//                    top.linkTo(slider.bottom)
-//                    start.linkTo(slider.start)
-//                })
-//        Text(
-//            text = mainViewModel.formatDuration(mainViewModel.duration),
-//            color = Color.White,
-//            fontWeight = FontWeight.Bold,
-//            modifier = Modifier.constrainAs(progress) {
-//                top.linkTo(slider.bottom)
-//                end.linkTo(slider.end)
-//            }
-//        )
-//
-//        Surface(color = MaterialTheme.colorScheme.primary,
-//            shape = RoundedCornerShape(45.dp),
-//            modifier = Modifier
-//                .padding(top = 32.dp)
-//                .constrainAs(play) {
-//                    top.linkTo(slider.bottom)
-//                    start.linkTo(next.end)
-//                    end.linkTo(previous.start)
-//                }) {
-//            Image(
-//                painter = painterResource(
-//                    id = if (mainViewModel.isPlaying)
-//                        R.drawable.baseline_pause else
-//                        R.drawable.baseline_play_arrow_24
-//                ),
-//                contentDescription = "",
-//                colorFilter = ColorFilter.tint(Color.Black),
-//                modifier = Modifier
-//                    .width(50.dp)
-//                    .padding(8.dp)
-//                    .aspectRatio(1f)
-//                    .clickable {
-//                        mainViewModel.onPlayerEvent(PlayerEvent.PlayPause)
-//                    }
-//            )
-//        }
-//
-//
-//        Image(
-//            painter = painterResource(id = R.drawable.baseline_skip_next_24),
-//            contentDescription = "",
-//            modifier = Modifier
-//                .padding(top = 32.dp)
-//                .width(56.dp)
-//                .aspectRatio(1f)
-//                .constrainAs(next) {
-//                    start.linkTo(repeat.end)
-//                    top.linkTo(play.top)
-//                    bottom.linkTo(play.bottom)
-//                    end.linkTo(play.start)
-//                }
-//                .clickable {
-//                    mainViewModel.onPlayerEvent(PlayerEvent.Forward)
-//                }
-//        )
-//
-//        Image(
-//            painter = painterResource(id = R.drawable.baseline_skip_previous_24),
-//            contentDescription = "",
-//            modifier = Modifier
-//                .padding(top = 32.dp)
-//                .width(56.dp)
-//                .aspectRatio(1f)
-//                .constrainAs(previous) {
-//                    end.linkTo(shuffle.start)
-//                    start.linkTo(play.end)
-//                    bottom.linkTo(play.bottom)
-//                    top.linkTo(play.top)
-//                }
-//                .clickable {
-//                    mainViewModel.onPlayerEvent(PlayerEvent.Backward)
-//                }
-//        )
-//        Image(
-//            painter = painterResource(id = R.drawable.baseline_repeat_24),
-//            contentDescription = "",
-//            modifier = Modifier
-//                .padding(top = 32.dp)
-//                .width(32.dp)
-//                .aspectRatio(1f)
-//                .constrainAs(repeat) {
-//                    end.linkTo(next.start)
-//                    start.linkTo(parent.start)
-//                    bottom.linkTo(play.bottom)
-//                    top.linkTo(play.top)
-//                }
-//                .clickable {
-//                    mainViewModel.onPlayerEvent(PlayerEvent.Repeat(1))
-//                }
-//        )
-//
-//        Image(
-//            painter = painterResource(id = R.drawable.baseline_shuffle_24),
-//            contentDescription = "",
-//            modifier = Modifier
-//                .padding(top = 32.dp)
-//                .width(32.dp)
-//                .aspectRatio(1f)
-//                .constrainAs(shuffle) {
-//                    end.linkTo(parent.end)
-//                    start.linkTo(previous.end)
-//                    bottom.linkTo(play.bottom)
-//                    top.linkTo(play.top)
-//                }
-//                .clickable {
-//                    mainViewModel.onPlayerEvent(PlayerEvent.Shuffle)
-//                }
-//        )
-//    }
 }
+
+@Composable
+private fun Body(scroll: ScrollState) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .verticalScroll(scroll)
+            .fillMaxWidth()
+    ) {
+        Spacer(Modifier.height(headerHeight))
+
+        repeat(5) {
+            Text(
+                text = stringResource(R.string.lorem_ipsum),
+                textAlign = TextAlign.Justify,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0XFF161616))
+                    .padding(16.dp)
+            )
+        }
+    }
+}
+
+//@Composable
+//private fun Title() {
+//    Text(
+//        text = "New York",
+//        fontSize = 30.sp,
+//        fontWeight = FontWeight.Bold,
+//        textAlign = TextAlign.Center,
+//        modifier = Modifier.fillMaxWidth()
+//    )
+//}

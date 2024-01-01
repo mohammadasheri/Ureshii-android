@@ -29,6 +29,7 @@ class HomeViewModel @Inject constructor(
 
     var songs = mutableStateListOf<Song>()
     var playlists = mutableStateListOf<Playlist>()
+    var selectedPlaylistIndex by savedStateHandle.saveable { mutableStateOf(0) }
     var isLoggedIn by savedStateHandle.saveable { mutableStateOf(true) }
 
     fun getSongs() {
