@@ -7,11 +7,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -37,7 +35,8 @@ fun BottomPlayer(mainViewModel: MainViewModel, mediaItem: MediaItem) {
         modifier = Modifier
             .background(ColorBottomPlayer)
             .fillMaxWidth()
-            .height(50.dp).clickable {
+            .height(50.dp)
+            .clickable {
                 mainViewModel.showPlayerView = true
             }
     ) {
@@ -50,10 +49,12 @@ fun BottomPlayer(mainViewModel: MainViewModel, mediaItem: MediaItem) {
             ),
             contentDescription = "",
             colorFilter = ColorFilter.tint(Color.White),
-            modifier = Modifier.padding(end=16.dp)
+            modifier = Modifier
+                .padding(end = 16.dp)
                 .clickable {
                     mainViewModel.onPlayerEvent(PlayerEvent.PlayPause)
-                }.constrainAs(play){
+                }
+                .constrainAs(play) {
                     top.linkTo(parent.top)
                     bottom.linkTo(slider.top)
                     end.linkTo(slider.end)
@@ -63,16 +64,20 @@ fun BottomPlayer(mainViewModel: MainViewModel, mediaItem: MediaItem) {
             contentScale = ContentScale.Crop,
             model = mediaItem.mediaMetadata.artworkUri,
             contentDescription = "",
-            modifier = Modifier.aspectRatio(1f).constrainAs(picture){
-                top.linkTo(parent.top)
-                bottom.linkTo(slider.top)
-                start.linkTo(parent.start)
-            }
+            modifier = Modifier
+                .padding(bottom = 4.dp, top = 4.dp, start = 16.dp)
+                .aspectRatio(1f)
+                .constrainAs(picture) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(slider.top)
+                    start.linkTo(parent.start)
+                }
         )
         Text(text = mediaItem.mediaMetadata.displayTitle.toString(),
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(start=16.dp)
+            modifier = Modifier
+                .padding(start = 16.dp)
                 .constrainAs(name) {
                     top.linkTo(picture.top)
                     bottom.linkTo(artist.top)
@@ -81,17 +86,18 @@ fun BottomPlayer(mainViewModel: MainViewModel, mediaItem: MediaItem) {
         Text(text = mediaItem.mediaMetadata.artist.toString(),
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier.padding(start=16.dp)
+            modifier = Modifier
+                .padding(start = 16.dp)
                 .constrainAs(artist) {
                     top.linkTo(name.bottom)
                     bottom.linkTo(picture.bottom)
                     start.linkTo(picture.end)
                 })
         ColorfulSlider(
-            value = 0.5f,
-            onValueChange = { progress -> },
+            value = mainViewModel.progress,
+            onValueChange = { newProgress -> },
             modifier = Modifier
-                .height(2.dp)
+                .height(3.dp)
                 .padding(start = 16.dp, end = 16.dp)
                 .constrainAs(slider) {
                     bottom.linkTo(parent.bottom)
