@@ -19,14 +19,13 @@ import androidx.navigation.compose.composable
 fun BottomNavHost(
     navController: NavHostController,
     mainViewModel: MainViewModel,
-    homeViewModel: HomeViewModel,
     innerPadding: PaddingValues
 ) {
     NavHost(
         navController, startDestination = Screen.Home.route, Modifier.padding(innerPadding)
     ) {
         composable(Screen.Home.route) {
-            HomeScreen(navController, mainViewModel, homeViewModel)
+            HomeScreen(mainViewModel)
         }
         composable(Screen.Search.route) { SearchScreen(navController) }
         composable(Screen.Library.route) { LibraryScreen(navController) }
@@ -36,12 +35,11 @@ fun BottomNavHost(
 @Composable
 fun MainNavHost(
     navController: NavHostController,
-    mainViewModel: MainViewModel,
-    playerViewModel: PlayerViewModel
+    mainViewModel: MainViewModel
 ) {
     NavHost(navController, startDestination = Screen.None.route) {
         composable(Screen.Player.route) {
-            PlayerScreen(mainViewModel, playerViewModel)
+            PlayerScreen(mainViewModel)
         }
         composable(Screen.None.route) {
             mainViewModel.showPlayerView = false

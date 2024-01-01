@@ -16,8 +16,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,8 +23,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
-    private val homeViewModel: HomeViewModel by viewModels()
-    private val playerViewModel: PlayerViewModel by viewModels()
 
     private var isServiceRunning = false
 
@@ -38,6 +34,11 @@ class MainActivity : ComponentActivity() {
             }
         }
         setContent {
+            val bottomNavController = rememberNavController()
+            val outNavController = rememberNavController()
+            if (mainViewModel.showPlayerView) {
+                mainViewModel.navigateToScreen(outNavController, Screen.Player.route)
+            }
             if (!mainViewModel.isLoggedIn) {
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
@@ -45,37 +46,26 @@ class MainActivity : ComponentActivity() {
             }
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                 UreshiiTheme {
-                    val bottomNavController = rememberNavController()
-                    val outNavController = rememberNavController()
                     Scaffold(
-                        bottomBar = { BottomBar(navController = bottomNavController,mainViewModel) }
+                        bottomBar = {
+                            BottomBar(
+                                navController = bottomNavController,
+                                mainViewModel
+                            )
+                        }
                     ) { innerPadding ->
                         BottomNavHost(
                             bottomNavController,
                             mainViewModel,
-                            homeViewModel,
                             innerPadding
                         )
                     }
-                    if (mainViewModel.showPlayerView) {
-                        navigateToScreen(outNavController, Screen.Player.route)
-                    }
-                    MainNavHost(outNavController, mainViewModel, playerViewModel)
+                    MainNavHost(outNavController, mainViewModel)
                 }
             }
         }
         actionBar?.hide()
         startService()
-    }
-
-    private fun navigateToScreen(bottomNavController: NavHostController, route: String) {
-        bottomNavController.navigate(route) {
-            popUpTo(bottomNavController.graph.findStartDestination().id) {
-                saveState = true
-            }
-            launchSingleTop = true
-            restoreState = true
-        }
     }
 
     override fun onDestroy() {

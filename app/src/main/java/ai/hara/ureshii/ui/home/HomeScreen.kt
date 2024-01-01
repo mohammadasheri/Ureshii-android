@@ -1,7 +1,9 @@
 package ai.hara.ureshii.ui.home
 
 import ai.hara.ureshii.R
-import ai.hara.ureshii.service.PlayerEvent
+import ai.hara.ureshii.data.model.Playlist
+import ai.hara.ureshii.data.model.Song
+import ai.hara.ureshii.ui.Screen
 import ai.hara.ureshii.ui.main.MainViewModel
 import ai.hara.ureshii.util.getHostURL
 import androidx.compose.foundation.background
@@ -27,38 +29,47 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 
 @Composable
 fun HomeScreen(
-    navController: NavHostController,
-    mainViewModel: MainViewModel,
-    viewmodel: HomeViewModel
+    mainViewModel: MainViewModel
 ) {
-    if(!viewmodel.isLoggedIn){
-        mainViewModel.isLoggedIn = viewmodel.isLoggedIn
+    val viewModel: HomeViewModel = hiltViewModel()
+    val navController = rememberNavController()
+    if (!viewModel.isLoggedIn) {
+        mainViewModel.isLoggedIn = viewModel.isLoggedIn
     }
     LazyColumn(
-        modifier = Modifier.fillMaxSize().background(colorResource(R.color.background)),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.background)),
     ) {
         item {
-            HomePlayLists(mainViewModel, viewmodel)
+            HomePlayLists(navController, mainViewModel, viewModel)
         }
         item {
-            HomeSongList(mainViewModel, viewmodel)
+            HomeSongList(mainViewModel, viewModel)
         }
     }
+    HomeNavHost(navController = navController)
     DisposableEffect(Unit) {
-        viewmodel.getSongs()
+        viewModel.getSongs()
         onDispose {}
     }
 }
 
 
 @Composable
-fun HomePlayLists(mainViewModel: MainViewModel, viewmodel: HomeViewModel) {
+fun HomePlayLists(
+    navController: NavHostController,
+    mainViewModel: MainViewModel,
+    viewmodel: HomeViewModel
+) {
     Text(
         text = stringResource(R.string.new_playlists),
         color = colorResource(id = R.color.white),
@@ -67,14 +78,7 @@ fun HomePlayLists(mainViewModel: MainViewModel, viewmodel: HomeViewModel) {
     )
     LazyRow {
         itemsIndexed(viewmodel.playlists) { index, item ->
-            PlaylistItem(
-                mainViewModel,
-                viewmodel,
-                "${getHostURL()}playlist/picture/download/${item.id}",
-                item.name,
-                item.name,
-                index
-            )
+            PlaylistItem(navController, mainViewModel, viewmodel, item)
         }
     }
 }
@@ -92,9 +96,7 @@ fun HomeSongList(mainViewModel: MainViewModel, viewmodel: HomeViewModel) {
             SongItem(
                 viewmodel,
                 mainViewModel,
-                "${getHostURL()}song/picture/download/${item.id}",
-                item.name,
-                item.artist?.get(0)?.name ?: "",
+                item,
                 index
             )
         }
@@ -104,12 +106,10 @@ fun HomeSongList(mainViewModel: MainViewModel, viewmodel: HomeViewModel) {
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun PlaylistItem(
+    navController: NavHostController,
     mainViewModel: MainViewModel,
     viewmodel: HomeViewModel,
-    imageUrl: String,
-    titleString: String,
-    subtitleString: String,
-    index: Int
+    item: Playlist
 ) {
     Card(backgroundColor = colorResource(R.color.card),
         modifier = Modifier
@@ -117,7 +117,7 @@ fun PlaylistItem(
             .width(115.dp)
             .aspectRatio(0.71f)
             .clickable {
-                mainViewModel.loadData(viewmodel.songs, index)
+                mainViewModel.navigateToScreen(navController, Screen.PlayList.route)
             }
     ) {
         ConstraintLayout(
@@ -125,7 +125,7 @@ fun PlaylistItem(
         ) {
             val (image, title, artist) = createRefs()
             GlideImage(contentScale = ContentScale.Crop,
-                model = imageUrl,
+                model = "${getHostURL()}playlist/picture/download/${item.id}",
                 contentDescription = "",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -136,7 +136,7 @@ fun PlaylistItem(
                         end.linkTo(parent.end)
                     })
             Text(
-                text = titleString,
+                text = item.name,
                 color = Color.White,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -149,7 +149,7 @@ fun PlaylistItem(
             )
             Text(
                 color = Color.White,
-                text = subtitleString,
+                text = item.name,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis, modifier = Modifier
                     .constrainAs(artist) {
@@ -164,13 +164,7 @@ fun PlaylistItem(
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun SongItem(
-    viewmodel: HomeViewModel, mainViewModel: MainViewModel,
-    imageUrl: String,
-    titleString: String,
-    subtitleString: String,
-    index: Int
-) {
+fun SongItem(viewmodel: HomeViewModel, mainViewModel: MainViewModel, item: Song, index: Int) {
     Card(backgroundColor = colorResource(R.color.card),
         modifier = Modifier
             .padding(start = 4.dp, end = 4.dp)
@@ -185,7 +179,7 @@ fun SongItem(
         ) {
             val (image, title, artist) = createRefs()
             GlideImage(contentScale = ContentScale.FillBounds,
-                model = imageUrl,
+                model = "${getHostURL()}song/picture/download/${item.id}",
                 contentDescription = "",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -196,7 +190,7 @@ fun SongItem(
                         end.linkTo(parent.end)
                     })
             Text(
-                text = titleString,
+                text = item.name,
                 color = Color.White,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -209,7 +203,7 @@ fun SongItem(
             )
             Text(
                 color = Color.White,
-                text = subtitleString,
+                text = item.artist?.get(0)?.name ?: "",
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis, modifier = Modifier
                     .constrainAs(artist) {

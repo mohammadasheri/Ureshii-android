@@ -2,6 +2,7 @@ package ai.hara.ureshii.ui.player
 
 import ai.hara.ureshii.R
 import ai.hara.ureshii.service.PlayerEvent
+import ai.hara.ureshii.ui.home.HomeViewModel
 import ai.hara.ureshii.ui.main.MainViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -28,15 +29,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.media3.common.MediaItem
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 
 @Composable
 fun PlayerScreen(
-    mainViewModel: MainViewModel,
-    viewmodel: PlayerViewModel
+    mainViewModel: MainViewModel
 ) {
+    val viewModel: PlayerViewModel = hiltViewModel()
     PlayerScreenDetail(
         mainViewModel,
         mainViewModel.selectedSong.value
