@@ -9,12 +9,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 
 @Composable
-fun HomeNavHost(navController: NavHostController, viewmodel: HomeViewModel) {
+fun HomeNavHost(
+    navController: NavHostController,
+    viewmodel: HomeViewModel,
+    mainViewModel: MainViewModel
+) {
     NavHost(navController, startDestination = Screen.None.route) {
         composable(Screen.None.route) { navBackStackEntry ->
         }
         composable(Screen.PlayList.route) {
-            PlaylistScreen(viewmodel.playlists[viewmodel.selectedPlaylistIndex])
+            PlaylistScreen(viewmodel.playlists[viewmodel.selectedPlaylistIndex], mainViewModel)
         }
     }
 }

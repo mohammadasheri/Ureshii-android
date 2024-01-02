@@ -35,4 +35,7 @@ interface SongService {
 
     @HTTP(method = HTTPVerb.GET, path = "song/list", hasBody = false)
     suspend fun getSongs(): List<Song>
+
+    @HTTP(method = HTTPVerb.GET, path = "/playlist/listSongs/{id}", hasBody = false)
+    suspend fun getPlaylistSongs(@Path(value="id") pId: Int): List<Song>
 }

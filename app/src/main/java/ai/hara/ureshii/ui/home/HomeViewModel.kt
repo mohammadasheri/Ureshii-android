@@ -32,7 +32,7 @@ class HomeViewModel @Inject constructor(
     var selectedPlaylistIndex by savedStateHandle.saveable { mutableStateOf(0) }
     var isLoggedIn by savedStateHandle.saveable { mutableStateOf(true) }
 
-    fun getSongs() {
+    fun loadData() {
         viewModelScope.launch {
             when (val response = repository.getSongs()) {
                 is ResultWrapper.Error -> Timber.tag("Mohamamd").i(response.error.toString())

@@ -52,4 +52,10 @@ class SongRepository(
             service.getSongs()
         }
     }
+
+    suspend fun getPlaylistSongs(pId: Int): ResultWrapper<List<Song>> {
+        return networkHelper.safeApiCall(dispatcher) {
+            service.getPlaylistSongs(pId)
+        }
+    }
 }

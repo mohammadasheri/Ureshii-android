@@ -36,6 +36,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             val bottomNavController = rememberNavController()
             val outNavController = rememberNavController()
+            val homeNavController = rememberNavController()
+
             if (mainViewModel.showPlayerView) {
                 mainViewModel.navigateToScreen(outNavController, Screen.Player.route)
             }

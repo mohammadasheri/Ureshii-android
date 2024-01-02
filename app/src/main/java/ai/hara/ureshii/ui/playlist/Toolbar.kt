@@ -5,10 +5,10 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.IconButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -17,18 +17,34 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+private val toolbarHeight = 56.dp
 
 @Composable
-fun Toolbar(scroll: ScrollState, headerHeightPx: Float, toolbarHeightPx: Float) {
+fun Toolbar(state: LazyListState, headerHeight: Dp) {
+    val headerHeightPx = with(LocalDensity.current) { headerHeight.toPx() }
+    val toolbarHeightPx = with(LocalDensity.current) { toolbarHeight.toPx() }
     val toolbarBottom = headerHeightPx - toolbarHeightPx
+    val scrollValue = remember { mutableIntStateOf(0) }
     val showToolbar = remember {
         derivedStateOf {
-            scroll.value >= toolbarBottom
+            scrollValue.intValue = state.layoutInfo.visibleItemsInfo.firstOrNull()?.size ?: 0
+            val totalItems = state.layoutInfo.totalItemsCount
+            val itemLengthInPx = state.layoutInfo.visibleItemsInfo.firstOrNull()?.size ?: 0
+            val totalLengthInPx = totalItems * itemLengthInPx
+            if (totalLengthInPx > 0) {
+                val scrollPos = (state.firstVisibleItemIndex * itemLengthInPx) / totalLengthInPx
+                (state.firstVisibleItemScrollOffset + scrollPos >= toolbarBottom) || state.firstVisibleItemIndex > 0
+            } else {
+                false
+            }
         }
     }
 

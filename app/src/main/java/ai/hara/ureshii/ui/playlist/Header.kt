@@ -2,17 +2,16 @@ package ai.hara.ureshii.ui.playlist
 
 import ai.hara.ureshii.data.model.Playlist
 import ai.hara.ureshii.util.getHostURL
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -29,15 +28,15 @@ import com.bumptech.glide.integration.compose.GlideImage
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun Header(playlist: Playlist, scroll: ScrollState, headerHeight: Dp) {
+fun Header(playlist: Playlist, state: LazyListState, headerHeight: Dp) {
     val headerHeightPx = with(LocalDensity.current) { headerHeight.toPx() }
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(headerHeight)
             .graphicsLayer {
-                alpha = (-1f / headerHeightPx) * scroll.value + 1
-                translationY = -scroll.value.toFloat() / 2f // Parallax effect
+                alpha = (-1f / headerHeightPx) * state.firstVisibleItemScrollOffset + 1
+                translationY = -state.firstVisibleItemScrollOffset.toFloat() / 2f // Parallax effect
             }
     ) {
         GlideImage(
