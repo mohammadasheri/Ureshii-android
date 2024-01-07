@@ -2,13 +2,14 @@ package ai.hara.ureshii.ui.main
 
 import ai.hara.ureshii.service.SimpleMediaService
 import ai.hara.ureshii.ui.Screen
-import ai.hara.ureshii.ui.home.HomeViewModel
 import ai.hara.ureshii.ui.login.LoginActivity
-import ai.hara.ureshii.ui.player.PlayerViewModel
 import ai.hara.ureshii.ui.theme.UreshiiTheme
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material3.Scaffold
@@ -23,7 +24,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
-
     private var isServiceRunning = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +34,7 @@ class MainActivity : ComponentActivity() {
             }
         }
         setContent {
+            onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
             val bottomNavController = rememberNavController()
             val outNavController = rememberNavController()
             val homeNavController = rememberNavController()
@@ -81,6 +82,18 @@ class MainActivity : ComponentActivity() {
             val intent = Intent(this, SimpleMediaService::class.java)
             startForegroundService(intent)
             isServiceRunning = true
+        }
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            // Your business logic to handle the back pressed event
+            val controller = mainViewModel.navStack.pop()
+            if (controller!=null){
+                controller.popBackStack()
+            }else{
+                finish()
+            }
         }
     }
 }

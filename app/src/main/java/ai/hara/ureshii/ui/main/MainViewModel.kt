@@ -21,6 +21,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.Stack
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -38,6 +39,7 @@ class MainViewModel @Inject constructor(
     var progressString by savedStateHandle.saveable { mutableStateOf("00:00") }
     var isPlaying by savedStateHandle.saveable { mutableStateOf(false) }
     var isLoggedIn by savedStateHandle.saveable { mutableStateOf(true) }
+    val navStack = Stack<NavHostController>()
 
     private val _loading = MutableStateFlow(true)
     val loading = _loading.asStateFlow()
@@ -56,6 +58,7 @@ class MainViewModel @Inject constructor(
                     is SimpleMediaState.Ready -> {
                         duration = mediaState.duration
                     }
+
                     is SimpleMediaState.TrackChange -> {
                         selectedSong.value = simpleMediaServiceHandler.getCurrentMediaItem()!!
                     }
@@ -121,6 +124,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun navigateToScreen(navController: NavHostController, route: String) {
+        navStack.push(navController)
         navController.navigate(route) {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true
