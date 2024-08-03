@@ -4,10 +4,8 @@ import ai.hara.ureshii.service.SimpleMediaService
 import ai.hara.ureshii.ui.Screen
 import ai.hara.ureshii.ui.login.LoginActivity
 import ai.hara.ureshii.ui.theme.UreshiiTheme
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
@@ -88,11 +86,13 @@ class MainActivity : ComponentActivity() {
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             // Your business logic to handle the back pressed event
-            val controller = mainViewModel.navStack.pop()
-            if (controller!=null){
-                controller.popBackStack()
-            }else{
-                finish()
+            mainViewModel.navStack.let { stack ->
+                if (stack.isEmpty()) {
+                    finish()
+                }else{
+                    val controller = stack.pop()
+                    controller?.popBackStack() ?: finish()
+                }
             }
         }
     }

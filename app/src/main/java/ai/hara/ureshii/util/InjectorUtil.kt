@@ -11,4 +11,4 @@ inline fun <T> LiveData<T>.observeNotNull(
     observe(owner) { if (it != null) observer(it) }
 }
 
-fun getHostURL(): String = "http://192.168.1.175:8080/"
+fun getHostURL(): String = "http://192.168.0.109:8080/ureshii/"
