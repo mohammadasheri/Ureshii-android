@@ -8,6 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -50,7 +51,7 @@ class LoginActivity : ComponentActivity() {
     @Composable
     fun ConstraintLayoutContent() {
         ConstraintLayout(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().background(Color.White)
         ) {
             // Create references for the composables to constrain
             val (username, password, register, login) = createRefs()

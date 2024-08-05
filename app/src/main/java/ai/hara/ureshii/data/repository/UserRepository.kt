@@ -11,7 +11,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 class UserRepository(
-    private val service: UserService, private val networkHelper: NetworkHelper,
+    private val service: UserService,
+    private val networkHelper: NetworkHelper,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 

@@ -87,7 +87,10 @@ fun HomeSongList(mainViewModel: MainViewModel, viewmodel: HomeViewModel) {
     )
     LazyRow {
         itemsIndexed(viewmodel.songs) { index, item ->
-            val artist = item.artist?.get(0)?.name ?: ""
+            val artist = ""
+            if (item.artist.isNotEmpty()){
+                item.artist.first().name
+            }
             val picture = "${getHostURL()}song/picture/download/${item.id}"
             HorizontalCardListItem(item.name, artist, picture) {
                 mainViewModel.loadData(viewmodel.songs, index)

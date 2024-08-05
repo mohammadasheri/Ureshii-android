@@ -30,14 +30,20 @@ class PlaylistViewModel @Inject constructor(
     fun loadData(pId: Int) {
         viewModelScope.launch {
             when (val response = repository.getPlaylistSongs(pId)) {
-                is ResultWrapper.Error -> Timber.tag("Mohamamd").i(response.error.toString())
+                is ResultWrapper.Error -> {
+                    Timber.tag("Mohamamd").i(response.error.toString())
+                }
                 is ResultWrapper.Success -> {
                     songs.clear()
                     songs.addAll(response.value)
                 }
 
-                is ResultWrapper.AuthorizationError -> isLoggedIn = false
-                is ResultWrapper.NetworkError -> Timber.tag("Mohamamd").i(response.error.toString())
+                is ResultWrapper.AuthorizationError ->{
+                    isLoggedIn = false
+                }
+                is ResultWrapper.NetworkError -> {
+                    Timber.tag("Mohamamd").i(response.error.toString())
+                }
             }
         }
     }

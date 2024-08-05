@@ -115,7 +115,7 @@ class MainViewModel @Inject constructor(
                             .setArtworkUri(Uri.parse("${getHostURL()}song/picture/download/${song.id}"))
                             .setAlbumTitle(song.album)
                             .setDisplayTitle(song.name)
-                            .setArtist(song.artist?.get(0)?.name)
+                            .setArtist(if (song.artist.isNotEmpty()) song.artist[0].name else "")
                             .build()
                     ).build()
             )

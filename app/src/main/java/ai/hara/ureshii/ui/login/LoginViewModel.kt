@@ -3,6 +3,7 @@ package ai.hara.ureshii.ui.login
 import ai.hara.ureshii.data.repository.UserRepository
 import ai.hara.ureshii.util.network.ResultWrapper
 import android.content.SharedPreferences
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -54,7 +55,7 @@ class LoginViewModel @Inject constructor(
                     isLoggedIn = true
                     saveToken(response.value.token)
                 }
-                is ResultWrapper.AuthorizationError -> TODO()
+                is ResultWrapper.AuthorizationError -> Timber.tag("Mohamamd").e(response.error.toString())
             }
         }
     }

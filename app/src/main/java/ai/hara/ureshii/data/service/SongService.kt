@@ -9,13 +9,13 @@ import retrofit2.http.*
 
 interface SongService {
 
-    @HTTP(method = HTTPVerb.GET, path = "playlist/track", hasBody = false)
-    fun getPlaylistSongs(
-        @Header("TK") token: String,
-        @Header("UUID") uuid: String,
-        @Header("DEV") dev: String,
-        @Query("playlist") playlistId: Int
-    ): LiveData<ApiResponse<List<Song>>>
+//    @HTTP(method = HTTPVerb.GET, path = "playlist/track", hasBody = false)
+//    fun getPlaylistSongs(
+//        @Header("TK") token: String,
+//        @Header("UUID") uuid: String,
+//        @Header("DEV") dev: String,
+//        @Query("playlist") playlistId: Int
+//    ): LiveData<ApiResponse<List<Song>>>
 
     @HTTP(method = HTTPVerb.POST, path = "favorite", hasBody = true)
     fun likeSong(
@@ -36,6 +36,6 @@ interface SongService {
     @HTTP(method = HTTPVerb.GET, path = "song/list", hasBody = false)
     suspend fun getSongs(): List<Song>
 
-    @HTTP(method = HTTPVerb.GET, path = "/playlist/listSongs/{id}", hasBody = false)
-    suspend fun getPlaylistSongs(@Path(value="id") pId: Int): List<Song>
+    @HTTP(method = HTTPVerb.GET, path = "playlist/listSongs/{id}", hasBody = false)
+    suspend fun getPlaylistSongs(@Path("id") pId: Int): List<Song>
 }

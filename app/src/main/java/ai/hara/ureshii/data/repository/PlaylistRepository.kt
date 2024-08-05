@@ -9,7 +9,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 class PlaylistRepository(
-    private val service: PlaylistService, private val networkHelper: NetworkHelper,
+    private val service: PlaylistService,
+    private val networkHelper: NetworkHelper,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
     suspend fun getHomePlaylists(): ResultWrapper<List<Playlist>> {
