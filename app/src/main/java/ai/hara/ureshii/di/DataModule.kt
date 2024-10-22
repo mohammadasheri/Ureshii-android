@@ -1,9 +1,11 @@
 package ai.hara.ureshii.di
 
 import ai.hara.ureshii.data.repository.PlaylistRepository
+import ai.hara.ureshii.data.repository.SearchRepository
 import ai.hara.ureshii.data.repository.SongRepository
 import ai.hara.ureshii.data.repository.UserRepository
 import ai.hara.ureshii.data.service.PlaylistService
+import ai.hara.ureshii.data.service.SearchService
 import ai.hara.ureshii.data.service.SongService
 import ai.hara.ureshii.data.service.UserService
 import ai.hara.ureshii.util.TokenAuthenticator
@@ -52,6 +54,13 @@ class DataModule {
         networkHelper: NetworkHelper,
     ): UserRepository = UserRepository(userApiServices, networkHelper)
 
+    @Provides
+    @Singleton
+    fun provideSearchRepository(
+        searchApiServices: SearchService,
+        networkHelper: NetworkHelper,
+    ): SearchRepository = SearchRepository(searchApiServices, networkHelper)
+
 
     @Provides
     @Singleton
@@ -63,11 +72,16 @@ class DataModule {
     fun providesPlaylistService(retrofit: Retrofit): PlaylistService =
         retrofit.create(PlaylistService::class.java)
 
-
     @Provides
     @Singleton
     fun providesUserService(retrofit: Retrofit): UserService =
         retrofit.create(UserService::class.java)
+
+    @Provides
+    @Singleton
+    fun providesSearchService(retrofit: Retrofit): SearchService =
+        retrofit.create(SearchService::class.java)
+
 
     @Singleton
     @Provides

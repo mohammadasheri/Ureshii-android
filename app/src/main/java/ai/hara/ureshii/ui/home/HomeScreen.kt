@@ -26,8 +26,8 @@ import androidx.navigation.compose.rememberNavController
 fun HomeScreen(
     mainViewModel: MainViewModel
 ) {
-    val viewModel: HomeViewModel = hiltViewModel()
-    val navController = rememberNavController()
+        val viewModel: HomeViewModel = hiltViewModel()
+        val navController = rememberNavController()
     if (!viewModel.isLoggedIn) {
         mainViewModel.isLoggedIn = viewModel.isLoggedIn
     }

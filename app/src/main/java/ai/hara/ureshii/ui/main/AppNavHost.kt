@@ -27,7 +27,7 @@ fun BottomNavHost(
         composable(Screen.Home.route) {
             HomeScreen(mainViewModel)
         }
-        composable(Screen.Search.route) { SearchScreen(navController) }
+        composable(Screen.Search.route) { SearchScreen(mainViewModel) }
         composable(Screen.Library.route) { LibraryScreen(navController) }
     }
 }
